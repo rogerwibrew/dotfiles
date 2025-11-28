@@ -11,6 +11,10 @@ kitty
 # Editor
 neovim  # Requires version 0.11+ for NvChad
 
+# Network Management
+iwd         # iNet wireless daemon (backend)
+impala      # TUI for managing WiFi
+
 # Development Tools
 base-devel  # Includes gcc, g++, make, and other build tools
 cmake

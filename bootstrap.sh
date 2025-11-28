@@ -223,6 +223,10 @@ systemctl --user enable --now pipewire-pulse.service
 systemctl --user enable --now wireplumber.service
 success "Audio services enabled"
 
+info "Enabling network services..."
+sudo systemctl enable --now iwd.service
+success "iwd service enabled (use 'impala' command to manage WiFi)"
+
 # Change default shell to zsh
 if [ "$SHELL" != "/usr/bin/zsh" ]; then
   info "Changing default shell to zsh..."
