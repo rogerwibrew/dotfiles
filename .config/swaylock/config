@@ -1,0 +1,76 @@
+# Swaylock Configuration
+# Tokyo Night Theme
+
+# Disable daemonize to show lock screen immediately
+daemonize
+
+# Ignore empty password
+ignore-empty-password
+
+# Show failed attempts
+show-failed-attempts
+
+# Display configuration
+indicator
+indicator-radius=120
+indicator-thickness=10
+
+# Clock
+clock
+timestr=%H:%M
+datestr=%a, %d %b
+
+# Font
+font=JetBrainsMono Nerd Font
+font-size=24
+
+# Colors - Tokyo Night
+# Background
+color=1a1b26
+
+# Inside colors
+inside-color=1a1b2600
+inside-clear-color=1a1b2600
+inside-caps-lock-color=1a1b2600
+inside-ver-color=1a1b2600
+inside-wrong-color=1a1b2600
+
+# Ring colors
+ring-color=414868
+ring-clear-color=7dcfff
+ring-caps-lock-color=e0af68
+ring-ver-color=7aa2f7
+ring-wrong-color=f7768e
+
+# Line color (between ring and inside)
+line-color=00000000
+line-clear-color=00000000
+line-caps-lock-color=00000000
+line-ver-color=00000000
+line-wrong-color=00000000
+
+# Text colors
+text-color=c0caf5
+text-clear-color=c0caf5
+text-caps-lock-color=c0caf5
+text-ver-color=c0caf5
+text-wrong-color=c0caf5
+
+# Key highlight
+key-hl-color=7aa2f7
+bs-hl-color=f7768e
+
+# Separator color
+separator-color=00000000
+
+# Effects
+effect-blur=7x5
+effect-vignette=0.5:0.5
+fade-in=0.2
+
+# Screenshots disabled for security
+screenshots
+
+# Layout
+indicator-x-position=960
+indicator-y-position=540

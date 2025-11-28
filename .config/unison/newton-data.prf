@@ -1,0 +1,35 @@
+# Unison profile for syncing data folder with newton server
+
+# Roots to sync
+root = /home/roger/data
+root = ssh://roger@newton//home/roger/data
+
+# Paths to sync (relative to roots)
+# Sync everything in data folder
+path = .
+
+# Ignore patterns
+ignore = Name .DS_Store
+ignore = Name *.swp
+ignore = Name *.swo
+ignore = Name *~
+ignore = Name Thumbs.db
+
+# Batch mode - don't ask for confirmation
+batch = true
+
+# Automatic mode - resolve conflicts automatically
+auto = true
+
+# Prefer newer files
+prefer = newer
+
+# Use fast checking
+fastcheck = true
+
+# SSH options
+sshargs = -C
+
+# Logging
+log = true
+logfile = /home/roger/.unison/newton-data.log

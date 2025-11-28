@@ -1,0 +1,14 @@
+# Editor and IDE
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+.*.tmp
+
+# System files
+Thumbs.db

@@ -1,0 +1,45 @@
+# Unison profile for syncing dev folder with newton server
+
+# Roots to sync
+root = /home/roger/dev
+root = ssh://roger@newton.local//home/roger/dev
+
+# Automatic mode - resolve conflicts automatically
+auto = true
+
+# Batch mode - don't ask for confirmation
+batch = true
+
+# Prefer newer files
+prefer = newer
+
+# Use fast checking
+fastcheck = true
+
+# Confirm before deleting large number of files
+confirmbigdel = true
+
+# Logging
+log = true
+logfile = /home/roger/.unison/dev-sync.log
+
+# Continuous sync with file watching
+repeat = watch
+
+# SSH options
+sshargs = -C
+
+# Ignore patterns
+ignore = Name .git
+ignore = Name node_modules
+ignore = Name __pycache__
+ignore = Name *.pyc
+ignore = Name .venv
+ignore = Name venv
+ignore = Name build
+ignore = Name dist
+ignore = Name target
+ignore = Name .DS_Store
+ignore = Name *.swp
+ignore = Name *.swo
+ignore = Name *~

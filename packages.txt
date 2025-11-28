@@ -1,0 +1,94 @@
+# Core Hyprland Packages
+hyprland
+xdg-desktop-portal-hyprland
+qt5-wayland
+qt6-wayland
+hyprpaper
+
+# Terminal
+kitty
+
+# Editor
+neovim  # Requires version 0.11+ for NvChad
+
+# Development Tools
+base-devel  # Includes gcc, g++, make, and other build tools
+cmake
+rust
+eza
+git
+openssh
+tmux
+unison
+
+# Shell
+zsh
+zsh-completions
+
+# Application Launcher
+wofi
+
+# Status Bar
+waybar
+
+# Lock Screen & Idle Management
+swaylock-effects
+swayidle
+
+# Notifications
+mako
+
+# Screenshots
+grim
+slurp
+
+# Clipboard
+wl-clipboard
+cliphist
+
+# File Manager (terminal-based)
+yazi
+
+# PDF Viewer
+zathura
+zathura-pdf-mupdf
+
+# Browser
+chromium
+
+# Fonts
+ttf-jetbrains-mono-nerd
+ttf-font-awesome
+noto-fonts
+noto-fonts-emoji
+
+# Audio
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+pamixer
+
+# Brightness Control
+brightnessctl
+
+# System Utilities
+polkit-kde-agent
+xdg-utils
+
+# Theme & Appearance
+qt5ct
+nwg-look
+
+# Package Manager
+# yay (AUR helper - must be installed manually first)
+
+# AUR Packages (install with yay)
+# hyprpicker (color picker for Wayland)
+# wlogout (logout menu)
+
+# Notes:
+# - All packages should be installed via yay (handles both official and AUR)
+# - NvChad will be cloned separately:
+#   git clone https://github.com/NvChad/starter ~/.config/nvim
+# - nvm should be installed via the official script, not pacman

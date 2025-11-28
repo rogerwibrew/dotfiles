@@ -1,0 +1,239 @@
+#!/bin/bash
+# Bootstrap script for dotfiles deployment on fresh Arch Linux install
+# This script installs all required packages and symlinks configurations
+# Supports both desktop (kelvin) and laptop (watt) configurations
+
+set -e # Exit on error
+
+# Get hostname to determine which config to use
+HOSTNAME=$(hostname)
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Helper functions
+info() {
+  echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+success() {
+  echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+warning() {
+  echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+error() {
+  echo -e "${RED}[ERROR]${NC} $1"
+  exit 1
+}
+
+# Check if running on Arch Linux
+if [ ! -f /etc/arch-release ]; then
+  error "This script is designed for Arch Linux only"
+fi
+
+# Verify hostname
+if [ "$HOSTNAME" != "kelvin" ] && [ "$HOSTNAME" != "watt" ]; then
+  error "Unknown hostname: $HOSTNAME (expected 'kelvin' or 'watt')"
+fi
+
+info "Starting dotfiles bootstrap process for $HOSTNAME..."
+info "User: $(whoami)"
+
+# Verify we're running as roger
+if [ "$(whoami)" != "roger" ]; then
+  error "This script must be run as user 'roger'"
+fi
+
+# Install yay if not already installed
+if ! command -v yay &>/dev/null; then
+  info "Installing yay AUR helper..."
+  cd /tmp
+  git clone https://aur.archlinux.org/yay.git
+  cd yay
+  makepkg -si --noconfirm
+  cd ~
+  success "yay installed"
+else
+  success "yay already installed"
+fi
+
+# Update system
+info "Updating system..."
+yay -Syu --noconfirm
+
+# Read packages from packages.txt and install
+info "Installing packages from packages.txt..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Extract package names (ignore comments and empty lines)
+PACKAGES=$(grep -v '^#' "$SCRIPT_DIR/packages.txt" | grep -v '^$' |
+  sed 's/#.*//' | tr '\n' ' ')
+
+if [ -n "$PACKAGES" ]; then
+  yay -S --needed --noconfirm $PACKAGES
+  success "All packages installed"
+else
+  warning "No packages found in packages.txt"
+fi
+
+# Install AUR packages (commented in packages.txt)
+info "Installing AUR packages..."
+yay -S --needed --noconfirm hyprpicker wlogout 2>/dev/null ||
+  warning "Some AUR packages may have failed"
+
+# Install nvm (Node Version Manager)
+info "Installing nvm..."
+if [ ! -d "$HOME/.nvm" ]; then
+  curl -o- \
+    https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh |
+    bash
+  success "nvm installed"
+else
+  success "nvm already installed"
+fi
+
+# Setup NvChad for Neovim
+info "Setting up NvChad..."
+if [ -d "$HOME/.config/nvim" ]; then
+  warning "Neovim config already exists, backing up to ~/.config/nvim.bak"
+  mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+fi
+git clone https://github.com/NvChad/starter "$HOME/.config/nvim"
+success "NvChad installed"
+
+# Create necessary directories
+info "Creating necessary directories..."
+mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.local/share/wallpapers"
+
+# Create home directory structure
+info "Creating home directory structure..."
+mkdir -p "$HOME/dev"
+mkdir -p "$HOME/data"
+mkdir -p "$HOME/downloads"
+success "Home directory structure created (dev, data, downloads)"
+
+# Symlink configuration files
+info "Symlinking configuration files..."
+
+# Function to create symlink with backup
+create_symlink() {
+  local source="$1"
+  local target="$2"
+
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    warning "Backing up existing $target to ${target}.bak"
+    mv "$target" "${target}.bak"
+  fi
+
+  ln -sf "$source" "$target"
+  success "Linked $source -> $target"
+}
+
+# Symlink config directories (non-hostname-specific)
+create_symlink "$SCRIPT_DIR/.config/kitty" "$HOME/.config/kitty"
+create_symlink "$SCRIPT_DIR/.config/wofi" "$HOME/.config/wofi"
+create_symlink "$SCRIPT_DIR/.config/mako" "$HOME/.config/mako"
+create_symlink "$SCRIPT_DIR/.config/yazi" "$HOME/.config/yazi"
+create_symlink "$SCRIPT_DIR/.config/swaylock" "$HOME/.config/swaylock"
+create_symlink "$SCRIPT_DIR/.config/swayidle" "$HOME/.config/swayidle"
+create_symlink "$SCRIPT_DIR/.config/tmux" "$HOME/.config/tmux"
+create_symlink "$SCRIPT_DIR/.config/unison" "$HOME/.unison"
+
+# Create waybar directory and symlink style.css
+mkdir -p "$HOME/.config/waybar"
+create_symlink "$SCRIPT_DIR/.config/waybar/style.css" \
+  "$HOME/.config/waybar/style.css"
+
+# Symlink hostname-specific Waybar config
+if [ -f "$SCRIPT_DIR/.config/waybar/config-$HOSTNAME" ]; then
+  info "Using hostname-specific Waybar config for $HOSTNAME"
+  create_symlink "$SCRIPT_DIR/.config/waybar/config-$HOSTNAME" \
+    "$HOME/.config/waybar/config"
+else
+  warning "No hostname-specific Waybar config found, using default"
+  create_symlink "$SCRIPT_DIR/.config/waybar/config" \
+    "$HOME/.config/waybar/config"
+fi
+
+# Create hypr directory and symlink hyprpaper config
+mkdir -p "$HOME/.config/hypr"
+create_symlink "$SCRIPT_DIR/.config/hypr/hyprpaper.conf" \
+  "$HOME/.config/hypr/hyprpaper.conf"
+
+# Symlink hostname-specific Hyprland config
+if [ -f "$SCRIPT_DIR/.config/hypr/hyprland-$HOSTNAME.conf" ]; then
+  info "Using hostname-specific Hyprland config for $HOSTNAME"
+  create_symlink "$SCRIPT_DIR/.config/hypr/hyprland-$HOSTNAME.conf" \
+    "$HOME/.config/hypr/hyprland.conf"
+else
+  warning "No hostname-specific config found, using default"
+  create_symlink "$SCRIPT_DIR/.config/hypr/hyprland.conf" \
+    "$HOME/.config/hypr/hyprland.conf"
+fi
+
+# Symlink shell configuration
+create_symlink "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
+
+# Copy wallpapers
+if [ -d "$SCRIPT_DIR/wallpapers" ] &&
+  [ "$(ls -A $SCRIPT_DIR/wallpapers)" ]; then
+  info "Copying wallpapers..."
+  cp -r "$SCRIPT_DIR/wallpapers/"* "$HOME/.local/share/wallpapers/"
+  success "Wallpapers copied"
+fi
+
+# Make scripts executable
+info "Making scripts executable..."
+find "$SCRIPT_DIR/scripts" -type f -name "*.sh" -exec chmod +x {} \;
+success "Scripts are now executable"
+
+# Enable services
+info "Enabling system services..."
+systemctl --user enable --now pipewire.service
+systemctl --user enable --now pipewire-pulse.service
+systemctl --user enable --now wireplumber.service
+success "Audio services enabled"
+
+# Change default shell to zsh
+if [ "$SHELL" != "/usr/bin/zsh" ]; then
+  info "Changing default shell to zsh..."
+  chsh -s /usr/bin/zsh
+  success "Default shell changed to zsh (takes effect on next login)"
+else
+  success "Default shell is already zsh"
+fi
+
+# Final setup instructions
+echo ""
+success "Bootstrap complete!"
+echo ""
+info "Next steps:"
+echo "  1. Set up SSH key for newton: ~/dotfiles/scripts/ssh/setup-ssh-key.sh"
+echo "  2. Reboot your system"
+echo "  3. Select Hyprland from your display manager"
+echo "  4. Start tmux (will auto-sync dev and data folders)"
+echo "  5. Open Neovim and run :MasonInstallAll for LSP support"
+echo "  6. Install Node.js: nvm install --lts"
+echo ""
+info "SSH and Sync:"
+echo "  Connect to newton : ~/dotfiles/scripts/ssh/connect-newton.sh"
+echo "  Manual sync       : ~/dotfiles/scripts/sync/sync-now.sh"
+echo ""
+info "Keybinding reference:"
+echo "  Super + Shift + Return : Terminal"
+echo "  Super + D              : Application launcher"
+echo "  Super + W              : Close window"
+echo "  Super + J/K            : Cycle through windows"
+echo "  Super + Return         : Make window master"
+echo "  Super + H/L            : Switch workspaces"
+echo "  Super + F              : Fullscreen"
+echo "  Super + L              : Lock screen"
+echo ""
