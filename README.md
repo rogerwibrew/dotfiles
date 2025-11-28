@@ -8,7 +8,7 @@ terminal-first workflow and continuous sync to newton server.
 On a fresh Arch Linux install:
 
 ```bash
-git clone <your-repo-url> ~/dotfiles
+git clone git@github.com:rogerwibrew/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./bootstrap.sh
 ```
