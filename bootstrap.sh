@@ -184,10 +184,12 @@ else
     "$HOME/.config/waybar/config"
 fi
 
-# Create hypr directory and symlink hyprpaper config
+# Create hypr directory and symlink configs
 mkdir -p "$HOME/.config/hypr"
 create_symlink "$SCRIPT_DIR/.config/hypr/hyprpaper.conf" \
   "$HOME/.config/hypr/hyprpaper.conf"
+create_symlink "$SCRIPT_DIR/.config/hypr/keybindings-apps.conf" \
+  "$HOME/.config/hypr/keybindings-apps.conf"
 
 # Symlink hostname-specific Hyprland config
 if [ -f "$SCRIPT_DIR/.config/hypr/hyprland-$HOSTNAME.conf" ]; then

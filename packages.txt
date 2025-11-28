@@ -21,10 +21,13 @@ cmake
 rust
 eza
 git
+lazygit     # TUI for git operations
 openssh
 tmux
 unison
 uv  # Fast Python package manager
+docker
+lazydocker  # TUI for docker management
 
 # Shell
 zsh
