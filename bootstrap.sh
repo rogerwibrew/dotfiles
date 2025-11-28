@@ -88,6 +88,11 @@ info "Installing AUR packages..."
 yay -S --needed --noconfirm hyprpicker wlogout 2>/dev/null ||
   warning "Some AUR packages may have failed"
 
+# Install Dashlane CLI (not available on AUR)
+info "Installing Dashlane CLI..."
+"$SCRIPT_DIR/scripts/setup/install-dashlane-cli.sh" ||
+  warning "Dashlane CLI installation failed"
+
 # Install nvm (Node Version Manager)
 info "Installing nvm..."
 if [ ! -d "$HOME/.nvm" ]; then
@@ -216,7 +221,9 @@ echo ""
 success "Bootstrap complete!"
 echo ""
 info "Next steps:"
-echo "  1. Set up SSH key for newton: ~/dotfiles/scripts/ssh/setup-ssh-key.sh"
+echo "  1. Restore SSH keys (choose one method):"
+echo "     From Dashlane: ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"
+echo "     From USB:     ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh"
 echo "  2. Reboot your system"
 echo "  3. Select Hyprland from your display manager"
 echo "  4. Start tmux (will auto-sync dev and data folders)"
@@ -224,8 +231,11 @@ echo "  5. Open Neovim and run :MasonInstallAll for LSP support"
 echo "  6. Install Node.js: nvm install --lts"
 echo ""
 info "SSH and Sync:"
-echo "  Connect to newton : ~/dotfiles/scripts/ssh/connect-newton.sh"
-echo "  Manual sync       : ~/dotfiles/scripts/sync/sync-now.sh"
+echo "  Restore from Dashlane : ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"
+echo "  Restore from USB      : ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh"
+echo "  Backup to USB         : ~/dotfiles/scripts/ssh/backup-ssh-to-usb.sh"
+echo "  Connect to newton     : ~/dotfiles/scripts/ssh/connect-newton.sh"
+echo "  Manual sync           : ~/dotfiles/scripts/sync/sync-now.sh"
 echo ""
 info "Keybinding reference:"
 echo "  Super + Shift + Return : Terminal"

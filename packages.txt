@@ -86,6 +86,7 @@ nwg-look
 # AUR Packages (install with yay)
 # hyprpicker (color picker for Wayland)
 # wlogout (logout menu)
+# dashlane-cli (password manager CLI)
 
 # Notes:
 # - All packages should be installed via yay (handles both official and AUR)

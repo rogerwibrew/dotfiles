@@ -23,7 +23,7 @@ The bootstrap script will:
 
 After bootstrap completes:
 
-1. Set up SSH key: `~/dotfiles/scripts/ssh/setup-ssh-key.sh`
+1. Restore SSH key from Dashlane: `~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh`
 2. Reboot and select Hyprland from your display manager
 3. Log in - Unison sync will start automatically in tmux
 
@@ -114,12 +114,15 @@ with newton.local server.
 ### Initial Setup
 
 ```bash
-# Set up SSH key authentication
-~/dotfiles/scripts/ssh/setup-ssh-key.sh
+# Restore SSH key from Dashlane
+~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh
 
 # Test connection
 ssh roger@newton.local
 ```
+
+The SSH key is stored in Dashlane and retrieved on each new machine setup.
+The restore script will prompt you to paste your private and public keys.
 
 ### Sync Workflow
 
@@ -157,7 +160,7 @@ hyprctl hyprpaper wallpaper ",~/.local/share/wallpapers/new.jpg"
 
 ## Post-Install Steps
 
-1. Set up SSH key: `~/dotfiles/scripts/ssh/setup-ssh-key.sh`
+1. Restore SSH key from Dashlane: `~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh`
 2. Add wallpaper to `~/.local/share/wallpapers/wallpaper.jpg`
 3. Open Neovim and run `:MasonInstallAll` for LSP support
 4. Install Node.js: `nvm install --lts`
