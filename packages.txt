@@ -20,6 +20,7 @@ git
 openssh
 tmux
 unison
+uv  # Fast Python package manager
 
 # Shell
 zsh
@@ -75,6 +76,8 @@ brightnessctl
 # System Utilities
 polkit-kde-agent
 xdg-utils
+fastfetch  # System information tool
+btop       # Resource monitor
 
 # Theme & Appearance
 qt5ct
