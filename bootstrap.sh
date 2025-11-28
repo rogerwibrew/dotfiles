@@ -104,6 +104,22 @@ else
   success "nvm already installed"
 fi
 
+# Install Node.js LTS via nvm
+info "Installing Node.js LTS..."
+# Source nvm to make it available in this shell
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+if command -v nvm &>/dev/null; then
+  nvm install --lts
+  nvm use --lts
+  success "Node.js LTS installed"
+  node --version
+else
+  warning "nvm not available, skipping Node.js installation"
+  info "Install manually after reboot: nvm install --lts"
+fi
+
 # Setup NvChad for Neovim
 info "Setting up NvChad..."
 if [ -d "$HOME/.config/nvim" ]; then
@@ -228,7 +244,6 @@ echo "  2. Reboot your system"
 echo "  3. Select Hyprland from your display manager"
 echo "  4. Start tmux (will auto-sync dev and data folders)"
 echo "  5. Open Neovim and run :MasonInstallAll for LSP support"
-echo "  6. Install Node.js: nvm install --lts"
 echo ""
 info "SSH and Sync:"
 echo "  Restore from Dashlane : ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"
