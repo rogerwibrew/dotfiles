@@ -31,6 +31,8 @@ error() {
 echo ""
 info "Web App Installer"
 echo ""
+info "For high-quality webapp icons, visit: https://dashboardicons.com/"
+echo ""
 
 # Prompt for app details
 read -p "App name (e.g., YouTube): " APP_NAME

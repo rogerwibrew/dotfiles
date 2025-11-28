@@ -57,6 +57,10 @@ You'll be prompted for:
 - **App URL**: Full URL (e.g., "https://youtube.com")
 - **Icon URL**: Optional icon image URL
 
+**Pro Tip**: For high-quality webapp icons, visit
+[Dashboard Icons](https://dashboardicons.com/) - a curated collection of
+beautiful, consistent icons for popular web services.
+
 This creates:
 - Desktop entry in `~/.local/share/applications/`
 - Icon in `~/.local/share/icons/webapps/` (if provided)
