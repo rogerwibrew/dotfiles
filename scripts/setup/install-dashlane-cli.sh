@@ -31,25 +31,33 @@ error() {
 # Check if already installed
 if command -v dcli &>/dev/null; then
   CURRENT_VERSION=$(dcli --version 2>&1 | grep -oP '\d+\.\d+\.\d+' | head -1)
-  info "Dashlane CLI already installed (version $CURRENT_VERSION)"
-  read -p "Do you want to reinstall/update? (y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    success "Keeping existing installation"
-    exit 0
-  fi
+  success "Dashlane CLI already installed (version $CURRENT_VERSION)"
+  exit 0
+fi
+
+# Check for required tools
+if ! command -v curl &>/dev/null; then
+  error "curl is required but not installed. Install it with: sudo pacman -S curl"
+fi
+
+if ! command -v unzip &>/dev/null; then
+  error "unzip is required but not installed. Install it with: sudo pacman -S unzip"
 fi
 
 # Fetch latest release info from GitHub API
 info "Fetching latest release information..."
 RELEASE_INFO=$(curl -s https://api.github.com/repos/Dashlane/dashlane-cli/releases/latest)
 
+if [ -z "$RELEASE_INFO" ]; then
+  error "Failed to fetch data from GitHub API (network issue or rate limit)"
+fi
+
 # Extract version and download URL for Linux x64
 VERSION=$(echo "$RELEASE_INFO" | grep -oP '"tag_name": "v\K[^"]+' | head -1)
 DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+linux-x64\.zip' | head -1)
 
 if [ -z "$VERSION" ] || [ -z "$DOWNLOAD_URL" ]; then
-  error "Failed to fetch release information from GitHub"
+  error "Failed to parse release information from GitHub API response"
 fi
 
 info "Latest version: $VERSION"

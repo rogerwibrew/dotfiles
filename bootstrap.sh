@@ -105,7 +105,11 @@ if [ ! -d "$HOME/.nvm" ]; then
   curl -o- \
     https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh |
     bash
-  success "nvm installed"
+  if [ -d "$HOME/.nvm" ]; then
+    success "nvm installed"
+  else
+    warning "nvm installation may have failed"
+  fi
 else
   success "nvm already installed"
 fi
@@ -114,16 +118,15 @@ fi
 info "Installing Node.js LTS..."
 # Source nvm to make it available in this shell
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-if command -v nvm &>/dev/null; then
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  \. "$NVM_DIR/nvm.sh"
   nvm install --lts
   nvm use --lts
   success "Node.js LTS installed"
   node --version
 else
-  warning "nvm not available, skipping Node.js installation"
-  info "Install manually after reboot: nvm install --lts"
+  warning "nvm not available in current shell, skipping Node.js installation"
+  info "After reboot, run: source ~/.zshrc && nvm install --lts"
 fi
 
 # Setup NvChad for Neovim

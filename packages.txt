@@ -85,6 +85,8 @@ polkit-kde-agent
 xdg-utils
 fastfetch  # System information tool
 btop       # Resource monitor
+curl       # HTTP client (needed for various install scripts)
+unzip      # Archive extraction (needed for Dashlane CLI)
 
 # Theme & Appearance
 qt5ct
