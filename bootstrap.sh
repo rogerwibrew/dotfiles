@@ -158,10 +158,14 @@ fi
 # Setup NvChad for Neovim
 info "Setting up NvChad..."
 if [ -d "$HOME/.config/nvim" ]; then
+  if [ -d "$HOME/.config/nvim.bak" ]; then
+    warning "Removing old nvim backup..."
+    rm -rf "$HOME/.config/nvim.bak" || true
+  fi
   warning "Neovim config already exists, backing up to ~/.config/nvim.bak"
-  mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+  mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak" || warning "Backup failed"
 fi
-if git clone https://github.com/NvChad/starter "$HOME/.config/nvim"; then
+if git clone https://github.com/NvChad/starter "$HOME/.config/nvim" 2>/dev/null; then
   success "NvChad installed"
 else
   warning "NvChad installation failed (network issue or already exists)"
