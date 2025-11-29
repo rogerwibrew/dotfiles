@@ -100,6 +100,9 @@ unzip      # Archive extraction (needed for Dashlane CLI)
 qt5ct
 nwg-look
 
+# AI Tools
+# claude-code (installed via curl script in bootstrap.sh)
+
 # Package Manager
 # yay (AUR helper - must be installed manually first)
 

@@ -115,6 +115,19 @@ info "Installing Dashlane CLI..."
 "$SCRIPT_DIR/scripts/setup/install-dashlane-cli.sh" ||
   warning "Dashlane CLI installation failed"
 
+# Install Claude Code (native installation via official script)
+info "Installing Claude Code..."
+if ! command -v claude &>/dev/null; then
+  if curl -fsSL https://claude.ai/install.sh | bash; then
+    success "Claude Code installed"
+  else
+    warning "Claude Code installation failed (network issue?)"
+    info "To install manually: curl -fsSL https://claude.ai/install.sh | bash"
+  fi
+else
+  success "Claude Code already installed"
+fi
+
 # Install nvm (Node Version Manager) with XDG compliance
 info "Installing nvm..."
 export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
