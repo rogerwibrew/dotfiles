@@ -37,15 +37,15 @@ git_prompt_info() {
   # Get current branch name
   local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 
-  # Get git status
-  local status=""
+  # Get git status indicator
+  local git_status=""
   if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-    status="%F{red}●%f"  # Red dot for dirty
+    git_status="%F{red}●%f"  # Red dot for dirty
   else
-    status="%F{green}●%f"  # Green dot for clean
+    git_status="%F{green}●%f"  # Green dot for clean
   fi
 
-  echo " %F{magenta}$branch%f $status"
+  echo " %F{magenta}$branch%f $git_status"
 }
 
 # Prompt - simple and clean with hostname and git info
