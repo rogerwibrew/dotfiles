@@ -240,6 +240,14 @@ info "Making scripts executable..."
 find "$SCRIPT_DIR/scripts" -type f -name "*.sh" -exec chmod +x {} \;
 success "Scripts are now executable"
 
+# Setup SDDM display manager
+info "Setting up SDDM display manager..."
+sudo mkdir -p /usr/share/sddm/themes
+sudo cp -r "$SCRIPT_DIR/sddm/themes/tokyo-night" /usr/share/sddm/themes/
+sudo cp "$SCRIPT_DIR/sddm/sddm.conf" /etc/sddm.conf
+sudo systemctl enable sddm.service
+success "SDDM installed and configured with Tokyo Night theme"
+
 # Enable services
 info "Enabling system services..."
 systemctl --user enable --now pipewire.service
@@ -269,9 +277,10 @@ echo "  1. Restore SSH keys (choose one method):"
 echo "     From Dashlane: ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"
 echo "     From USB:     ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh"
 echo "  2. Reboot your system"
-echo "  3. Select Hyprland from your display manager"
-echo "  4. Start tmux (will auto-sync dev and data folders)"
-echo "  5. Open Neovim and run :MasonInstallAll for LSP support"
+echo "  3. SDDM login screen will appear (Tokyo Night theme)"
+echo "  4. Select Hyprland session and log in"
+echo "  5. Start tmux (will auto-sync dev and data folders)"
+echo "  6. Open Neovim and run :MasonInstallAll for LSP support"
 echo ""
 info "SSH and Sync:"
 echo "  Restore from Dashlane : ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"

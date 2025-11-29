@@ -41,6 +41,11 @@ wofi
 # Status Bar
 waybar
 
+# Display Manager
+sddm
+qt6-svg
+qt6-declarative
+
 # Lock Screen & Idle Management
 swaylock-effects
 swayidle
