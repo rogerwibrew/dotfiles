@@ -211,6 +211,9 @@ fi
 # Symlink shell configuration
 create_symlink "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
 
+# Symlink scripts directory
+create_symlink "$SCRIPT_DIR/scripts" "$HOME/scripts"
+
 # Copy wallpapers
 if [ -d "$SCRIPT_DIR/wallpapers" ] &&
   [ "$(ls -A $SCRIPT_DIR/wallpapers)" ]; then
