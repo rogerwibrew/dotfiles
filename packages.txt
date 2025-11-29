@@ -1,4 +1,6 @@
 # Core Hyprland Packages
+# Note: Using official repo version for stability
+# For latest features, consider: hyprland-git (AUR, compiles from source)
 hyprland
 xdg-desktop-portal-hyprland
 qt5-wayland
