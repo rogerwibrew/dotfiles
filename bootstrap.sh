@@ -99,11 +99,12 @@ info "Installing Dashlane CLI..."
 "$SCRIPT_DIR/scripts/setup/install-dashlane-cli.sh" ||
   warning "Dashlane CLI installation failed"
 
-# Install nvm (Node Version Manager)
+# Install nvm (Node Version Manager) with XDG compliance
 info "Installing nvm..."
-if [ ! -d "$HOME/.nvm" ]; then
+export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
+if [ ! -d "$NVM_DIR" ]; then
   # Create .nvm directory to ensure it exists
-  mkdir -p "$HOME/.nvm"
+  mkdir -p "$NVM_DIR"
 
   # Download and run nvm install script
   if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash; then
@@ -117,7 +118,6 @@ fi
 
 # Install Node.js LTS via nvm
 # Only attempt if nvm was successfully installed
-export NVM_DIR="$HOME/.nvm"
 if [ -d "$NVM_DIR" ] && [ -s "$NVM_DIR/nvm.sh" ]; then
   info "Installing Node.js LTS..."
   # Source nvm to make it available in this shell
@@ -127,11 +127,11 @@ if [ -d "$NVM_DIR" ] && [ -s "$NVM_DIR/nvm.sh" ]; then
       node --version 2>/dev/null || true
     else
       warning "Failed to install Node.js via nvm"
-      info "After reboot, try: source ~/.zshrc && nvm install --lts"
+      info "After reboot, try: source ~/.zprofile && nvm install --lts"
     fi
   else
     warning "Failed to source nvm in current shell"
-    info "After reboot, try: source ~/.zshrc && nvm install --lts"
+    info "After reboot, try: source ~/.zprofile && nvm install --lts"
   fi
 else
   warning "nvm not found, skipping Node.js installation"
@@ -221,8 +221,13 @@ else
     "$HOME/.config/hypr/hyprland.conf"
 fi
 
-# Symlink shell configuration
-create_symlink "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
+# Symlink shell configuration (XDG-compliant)
+create_symlink "$SCRIPT_DIR/.zprofile" "$HOME/.zprofile"
+create_symlink "$SCRIPT_DIR/.config/zsh" "$HOME/.config/zsh"
+create_symlink "$SCRIPT_DIR/.config/shell" "$HOME/.config/shell"
+
+# Create XDG cache directory for zsh history
+mkdir -p "$HOME/.cache"
 
 # Symlink scripts directory
 create_symlink "$SCRIPT_DIR/scripts" "$HOME/scripts"

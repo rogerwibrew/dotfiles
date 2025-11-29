@@ -21,6 +21,8 @@ Goals:
 - **Wayland-native**: Using Hyprland compositor and Wayland ecosystem
 - **Version controlled**: All configs, scripts, and package lists in git
 - **Bootstrap-ready**: Single script deployment on fresh Arch install
+- **XDG compliant**: Following XDG Base Directory Specification for clean
+  home directory
 
 ## Technology Stack
 
@@ -28,7 +30,7 @@ Goals:
 
 - **OS**: Arch Linux
 - **Compositor**: Hyprland (Wayland)
-- **Shell**: zsh with vi mode and auto-completion
+- **Shell**: zsh with syntax highlighting, vi mode, and auto-completion
 - **Text Editor**: Neovim with NvChad
 - **Terminal**: Kitty with ligature support
 - **Browser**: Chromium
@@ -60,6 +62,10 @@ Goals:
 .
 ├── .config/
 │   ├── hypr/               # Hyprland configuration
+│   ├── zsh/
+│   │   └── .zshrc          # Interactive shell config
+│   ├── shell/
+│   │   └── alias           # Shell aliases (modular)
 │   ├── waybar/             # Status bar config
 │   ├── nvim/               # Neovim configuration
 │   ├── kitty/              # Terminal configuration
@@ -72,6 +78,7 @@ Goals:
 │   ├── screenshot/         # Screenshot utilities
 │   └── ...
 ├── wallpapers/             # Custom wallpapers
+├── .zprofile               # Login shell, XDG environment variables
 ├── packages.txt            # List of all installed packages
 ├── bootstrap.sh            # Fresh install setup script
 ├── README.md               # User-facing documentation
@@ -174,8 +181,9 @@ visual consistency.
 
 - Verify syntax of all config files
 - Test scripts for edge cases
-- Ensure no hardcoded paths (use $HOME, $XDG_CONFIG_HOME)
+- Ensure no hardcoded paths (use $HOME, $XDG_CONFIG_HOME, etc.)
 - Validate package dependencies
+- Maintain XDG Base Directory compliance for all new configurations
 
 ## Known Context About Roger
 
@@ -208,7 +216,10 @@ Fully functional dotfiles system with:
 - Complete Hyprland configuration with master layout
 - Tokyo Night theme across all components
 - Continuous sync to newton.local server via Unison
-- Zsh shell with auto-completion
+- Zsh shell with syntax highlighting, case-insensitive auto-completion,
+  and vi mode
+- XDG Base Directory compliance for clean home directory
+- Modular shell configuration (.zprofile, .config/zsh/, .config/shell/)
 - All essential utilities and scripts
 - Hostname-specific configurations for kelvin (desktop) and watt (laptop)
 

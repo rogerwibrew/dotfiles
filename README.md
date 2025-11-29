@@ -39,7 +39,7 @@ The bootstrap script will verify these requirements before proceeding.
 
 - **Compositor**: Hyprland with master layout
 - **Theme**: Tokyo Night color scheme throughout
-- **Shell**: zsh with auto-completion and vi mode
+- **Shell**: zsh with syntax highlighting, auto-completion, and vi mode
 - **Terminal**: Kitty with ligature support
 - **Editor**: Neovim with NvChad
 - **File Manager**: yazi (terminal-based)
@@ -50,6 +50,8 @@ The bootstrap script will verify these requirements before proceeding.
 - **Wallpaper**: hyprpaper
 - **Sync**: Unison with continuous file watching to newton.local
 - **Session Manager**: tmux with Tokyo Night theme
+- **XDG Compliance**: Clean home directory following XDG Base Directory
+  Specification
 
 ## Hostname-Specific Configurations
 
@@ -167,7 +169,8 @@ hyprctl hyprpaper wallpaper ",~/.local/share/wallpapers/new.jpg"
 
 ## Home Directory Structure
 
-The bootstrap script creates a clean home directory with three main folders:
+The bootstrap script creates a clean home directory with three main
+folders:
 
 ```
 ~/
@@ -177,6 +180,25 @@ The bootstrap script creates a clean home directory with three main folders:
 ```
 
 Screenshots are automatically saved to `~/data/screenshots/`.
+
+### XDG Base Directory Compliance
+
+This setup follows the XDG Base Directory Specification to keep your home
+directory clean:
+
+```
+~/.config/        # Configuration files (XDG_CONFIG_HOME)
+~/.local/share/   # Application data (XDG_DATA_HOME)
+~/.cache/         # Temporary cache files (XDG_CACHE_HOME)
+```
+
+Most applications are configured to respect these directories, including:
+
+- Zsh history → `~/.cache/zsh_history`
+- Python history → `~/.cache/python_history`
+- Node.js/nvm → `~/.local/share/nvm`
+- Cargo/Rust → `~/.local/share/cargo`
+- Go packages → `~/.local/share/go`
 
 ## Dotfiles Repository Structure
 
@@ -188,6 +210,10 @@ dotfiles/
 │   │   ├── hyprland-watt.conf      # Laptop config
 │   │   ├── hyprland.conf            # Base config (backup)
 │   │   └── hyprpaper.conf           # Wallpaper config
+│   ├── zsh/
+│   │   └── .zshrc                   # Interactive shell config
+│   ├── shell/
+│   │   └── alias                    # Shell aliases
 │   ├── kitty/                       # Terminal config
 │   ├── waybar/
 │   │   ├── config-kelvin            # Desktop status bar
@@ -208,7 +234,7 @@ dotfiles/
 │   ├── volume-notify.sh             # Volume notifications
 │   └── brightness-notify.sh         # Brightness notifications
 ├── wallpapers/                      # Custom wallpapers
-├── .zshrc                           # Zsh configuration
+├── .zprofile                        # Login shell, XDG variables
 ├── packages.txt                     # Package list
 ├── bootstrap.sh                     # Installation script
 ├── CLAUDE.md                        # AI assistant instructions

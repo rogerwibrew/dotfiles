@@ -1,0 +1,20 @@
+# Shell aliases
+# This file is sourced by .zshrc
+# Add your custom aliases here
+
+# Current aliases from original .zshrc
+alias ls='eza'
+alias ll='eza -l'
+alias la='eza -la'
+alias lt='eza --tree'
+
+# SSH and Sync shortcuts
+alias ssh-newton='~/dotfiles/scripts/ssh/connect-newton.sh'
+alias sync-now='~/dotfiles/scripts/sync/sync-now.sh'
+alias sync-check='tmux attach -t unison'
+alias sync-stop='tmux kill-session -t unison'
+alias sync-log='tail -f ~/.unison/dev-sync.log'
+
+# Dotfiles git shortcuts
+alias dotfiles-push='~/dotfiles/scripts/git/dotfiles-push.sh'
+alias dotfiles-pull='~/dotfiles/scripts/git/dotfiles-pull.sh'
