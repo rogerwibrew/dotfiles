@@ -12,3 +12,23 @@
 
 # System files
 Thumbs.db
+
+# Application runtime and cache files
+.config/nvim/
+.config/*/cache/
+.config/*/Cache/
+.config/*/logs/
+
+# Neovim plugin data (NvChad manages this)
+.local/share/nvim/
+
+# Application state files (not configs)
+.config/mako/mako
+.config/*/state
+.config/*/State
+
+# Lock files
+*.lock
+
+# Backup files created by bootstrap
+*.bak
