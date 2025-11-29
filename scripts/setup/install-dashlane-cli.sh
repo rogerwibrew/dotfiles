@@ -40,10 +40,6 @@ if ! command -v curl &>/dev/null; then
   error "curl is required but not installed. Install it with: sudo pacman -S curl"
 fi
 
-if ! command -v unzip &>/dev/null; then
-  error "unzip is required but not installed. Install it with: sudo pacman -S unzip"
-fi
-
 # Fetch latest release info from GitHub API
 info "Fetching latest release information..."
 RELEASE_INFO=$(curl -s https://api.github.com/repos/Dashlane/dashlane-cli/releases/latest)
@@ -66,14 +62,8 @@ if [ -z "$VERSION" ]; then
   VERSION=$(echo "$RELEASE_INFO" | grep -oP '"tag_name": "\K[^"]+' | head -1)
 fi
 
-# Try different possible file naming patterns
-DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+linux-x64\.zip' | head -1)
-if [ -z "$DOWNLOAD_URL" ]; then
-  DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+x86_64-linux\.zip' | head -1)
-fi
-if [ -z "$DOWNLOAD_URL" ]; then
-  DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+linux\.zip' | head -1)
-fi
+# Look for the dcli-linux-x64 binary
+DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+dcli-linux-x64"' | head -1)
 
 if [ -z "$VERSION" ] || [ -z "$DOWNLOAD_URL" ]; then
   warning "Failed to parse release information. API response (first 30 lines):"
@@ -92,11 +82,7 @@ TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 info "Downloading Dashlane CLI v$VERSION..."
-curl -L -o "$TEMP_DIR/dashlane-cli.zip" "$DOWNLOAD_URL"
-
-# Extract the binary
-info "Extracting..."
-unzip -q "$TEMP_DIR/dashlane-cli.zip" -d "$TEMP_DIR"
+curl -L -o "$TEMP_DIR/dcli" "$DOWNLOAD_URL"
 
 # Install to /usr/local/bin (requires sudo)
 info "Installing to /usr/local/bin (may require sudo)..."
