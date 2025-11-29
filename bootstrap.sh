@@ -78,6 +78,22 @@ yay -Syu --noconfirm
 info "Installing packages from packages.txt..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Ensure all required config directories exist in dotfiles repo
+info "Verifying dotfiles directory structure..."
+mkdir -p "$SCRIPT_DIR/.config/kitty"
+mkdir -p "$SCRIPT_DIR/.config/wofi"
+mkdir -p "$SCRIPT_DIR/.config/mako"
+mkdir -p "$SCRIPT_DIR/.config/yazi"
+mkdir -p "$SCRIPT_DIR/.config/swaylock"
+mkdir -p "$SCRIPT_DIR/.config/swayidle"
+mkdir -p "$SCRIPT_DIR/.config/tmux"
+mkdir -p "$SCRIPT_DIR/.config/unison"
+mkdir -p "$SCRIPT_DIR/.config/waybar"
+mkdir -p "$SCRIPT_DIR/.config/hypr"
+mkdir -p "$SCRIPT_DIR/.config/zsh"
+mkdir -p "$SCRIPT_DIR/.config/shell"
+success "Dotfiles directory structure verified"
+
 # Extract package names (ignore comments and empty lines)
 PACKAGES=$(grep -v '^#' "$SCRIPT_DIR/packages.txt" | grep -v '^$' |
   sed 's/#.*//' | tr '\n' ' ')
@@ -145,8 +161,11 @@ if [ -d "$HOME/.config/nvim" ]; then
   warning "Neovim config already exists, backing up to ~/.config/nvim.bak"
   mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
 fi
-git clone https://github.com/NvChad/starter "$HOME/.config/nvim"
-success "NvChad installed"
+if git clone https://github.com/NvChad/starter "$HOME/.config/nvim"; then
+  success "NvChad installed"
+else
+  warning "NvChad installation failed (network issue or already exists)"
+fi
 
 # Create necessary directories
 info "Creating necessary directories..."
