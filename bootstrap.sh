@@ -222,6 +222,7 @@ else
 fi
 
 # Symlink shell configuration (XDG-compliant)
+create_symlink "$SCRIPT_DIR/.zshenv" "$HOME/.zshenv"
 create_symlink "$SCRIPT_DIR/.zprofile" "$HOME/.zprofile"
 create_symlink "$SCRIPT_DIR/.config/zsh" "$HOME/.config/zsh"
 create_symlink "$SCRIPT_DIR/.config/shell" "$HOME/.config/shell"
