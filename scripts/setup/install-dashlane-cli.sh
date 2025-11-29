@@ -79,8 +79,8 @@ if [ -z "$VERSION" ] || [ -z "$DOWNLOAD_URL" ]; then
   warning "Failed to parse release information. API response (first 30 lines):"
   echo "$RELEASE_INFO" | head -30
   echo ""
-  warning "Trying to extract all .zip download URLs:"
-  echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+\.zip'
+  warning "All download URLs found:"
+  echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+'
   error "Could not extract version or download URL"
 fi
 
