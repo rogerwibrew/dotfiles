@@ -5,9 +5,6 @@
 
 set -e # Exit on error
 
-# Get hostname to determine which config to use
-HOSTNAME=$(hostname)
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -37,6 +34,14 @@ error() {
 if [ ! -f /etc/arch-release ]; then
   error "This script is designed for Arch Linux only"
 fi
+
+# Install essential utilities needed by this script
+info "Installing essential utilities..."
+sudo pacman -Sy --needed --noconfirm inetutils coreutils
+success "Essential utilities installed"
+
+# Get hostname to determine which config to use
+HOSTNAME=$(hostname)
 
 # Verify hostname
 if [ "$HOSTNAME" != "kelvin" ] && [ "$HOSTNAME" != "watt" ]; then
