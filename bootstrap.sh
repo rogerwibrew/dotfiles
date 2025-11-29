@@ -102,6 +102,10 @@ info "Installing Dashlane CLI..."
 # Install nvm (Node Version Manager)
 info "Installing nvm..."
 if [ ! -d "$HOME/.nvm" ]; then
+  # Create .nvm directory to ensure it exists
+  mkdir -p "$HOME/.nvm"
+
+  # Download and run nvm install script
   if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash; then
     success "nvm install script completed"
   else
