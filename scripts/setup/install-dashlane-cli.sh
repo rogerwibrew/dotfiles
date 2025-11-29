@@ -52,12 +52,20 @@ if [ -z "$RELEASE_INFO" ]; then
   error "Failed to fetch data from GitHub API (network issue or rate limit)"
 fi
 
+# Check if we got an error response
+if echo "$RELEASE_INFO" | grep -q '"message"'; then
+  MESSAGE=$(echo "$RELEASE_INFO" | grep -oP '"message": "\K[^"]+' | head -1)
+  error "GitHub API error: $MESSAGE"
+fi
+
 # Extract version and download URL for Linux x64
 VERSION=$(echo "$RELEASE_INFO" | grep -oP '"tag_name": "v\K[^"]+' | head -1)
 DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -oP '"browser_download_url": "\K[^"]+linux-x64\.zip' | head -1)
 
 if [ -z "$VERSION" ] || [ -z "$DOWNLOAD_URL" ]; then
-  error "Failed to parse release information from GitHub API response"
+  warning "Failed to parse release information. API response:"
+  echo "$RELEASE_INFO" | head -20
+  error "Could not extract version or download URL"
 fi
 
 info "Latest version: $VERSION"

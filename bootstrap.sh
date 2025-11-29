@@ -102,31 +102,37 @@ info "Installing Dashlane CLI..."
 # Install nvm (Node Version Manager)
 info "Installing nvm..."
 if [ ! -d "$HOME/.nvm" ]; then
-  curl -o- \
-    https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh |
-    bash
-  if [ -d "$HOME/.nvm" ]; then
-    success "nvm installed"
+  if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash; then
+    success "nvm install script completed"
   else
-    warning "nvm installation may have failed"
+    warning "nvm installation script failed (network issue?)"
   fi
 else
   success "nvm already installed"
 fi
 
 # Install Node.js LTS via nvm
-info "Installing Node.js LTS..."
-# Source nvm to make it available in this shell
+# Only attempt if nvm was successfully installed
 export NVM_DIR="$HOME/.nvm"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-  \. "$NVM_DIR/nvm.sh"
-  nvm install --lts
-  nvm use --lts
-  success "Node.js LTS installed"
-  node --version
+if [ -d "$NVM_DIR" ] && [ -s "$NVM_DIR/nvm.sh" ]; then
+  info "Installing Node.js LTS..."
+  # Source nvm to make it available in this shell
+  if \. "$NVM_DIR/nvm.sh" 2>/dev/null; then
+    if nvm install --lts 2>/dev/null && nvm use --lts 2>/dev/null; then
+      success "Node.js LTS installed"
+      node --version 2>/dev/null || true
+    else
+      warning "Failed to install Node.js via nvm"
+      info "After reboot, try: source ~/.zshrc && nvm install --lts"
+    fi
+  else
+    warning "Failed to source nvm in current shell"
+    info "After reboot, try: source ~/.zshrc && nvm install --lts"
+  fi
 else
-  warning "nvm not available in current shell, skipping Node.js installation"
-  info "After reboot, run: source ~/.zshrc && nvm install --lts"
+  warning "nvm not found, skipping Node.js installation"
+  info "To install nvm manually: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+  info "Then run: source ~/.zshrc && nvm install --lts"
 fi
 
 # Setup NvChad for Neovim
