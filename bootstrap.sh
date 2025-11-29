@@ -43,9 +43,10 @@ success "Essential utilities installed"
 # Get hostname to determine which config to use
 HOSTNAME=$(hostname)
 
-# Verify hostname
+# Check if hostname is recognized, otherwise use generic config
 if [ "$HOSTNAME" != "kelvin" ] && [ "$HOSTNAME" != "watt" ]; then
-  error "Unknown hostname: $HOSTNAME (expected 'kelvin' or 'watt')"
+  warning "Unknown hostname: $HOSTNAME (expected 'kelvin' or 'watt')"
+  warning "Will use generic configuration without hostname-specific settings"
 fi
 
 info "Starting dotfiles bootstrap process for $HOSTNAME..."
