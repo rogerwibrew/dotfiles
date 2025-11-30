@@ -49,9 +49,14 @@ if [ ! -f /etc/arch-release ]; then
   error "This script is designed for Arch Linux only"
 fi
 
+# Set SCRIPT_DIR early, before any directory changes
+# This ensures it's always correct regardless of where we cd to later
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+info "Bootstrap script location: $SCRIPT_DIR"
+
 # Install essential utilities needed by this script
 info "Installing essential utilities..."
-sudo pacman -Sy --needed --noconfirm inetutils coreutils
+sudo pacman -Sy --needed --noconfirm inetutils coreutils grep sed
 success "Essential utilities installed"
 
 # Get hostname to determine which config to use
@@ -90,7 +95,6 @@ yay -Syu --noconfirm || warning "System update had some issues, continuing..."
 
 # Read packages from packages.txt and install
 info "Installing packages from packages.txt..."
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Ensure all required config directories exist in dotfiles repo
 info "Verifying dotfiles directory structure..."
