@@ -2,6 +2,20 @@
 # Bootstrap script for dotfiles deployment on fresh Arch Linux install
 # This script installs all required packages and symlinks configurations
 # Supports both desktop (kelvin) and laptop (watt) configurations
+#
+# Execution Order:
+# 1. System checks (Arch Linux, user 'roger')
+# 2. Install yay AUR helper
+# 3. System update
+# 4. Install all packages (official repos + AUR)
+# 5. Install external tools (Dashlane, Claude Code, nvm, LazyVim)
+# 6. Create directory structure
+# 7. Symlink configurations
+# 8. Setup SDDM theme
+# 9. Enable system services
+# 10. Change default shell to zsh
+#
+# Note: This script is designed to be idempotent (safe to run multiple times)
 
 set -e # Exit on error
 
@@ -72,7 +86,7 @@ fi
 
 # Update system
 info "Updating system..."
-yay -Syu --noconfirm
+yay -Syu --noconfirm || warning "System update had some issues, continuing..."
 
 # Read packages from packages.txt and install
 info "Installing packages from packages.txt..."
@@ -118,11 +132,27 @@ info "Installing Dashlane CLI..."
 # Install Claude Code (native installation via official script)
 info "Installing Claude Code..."
 if ! command -v claude &>/dev/null; then
-  if curl -fsSL https://claude.ai/install.sh | bash; then
-    success "Claude Code installed"
+  info "Downloading Claude Code installer..."
+  if curl -fsSL https://claude.ai/install.sh -o /tmp/claude-install.sh; then
+    info "Running Claude Code installer..."
+    if bash /tmp/claude-install.sh; then
+      rm -f /tmp/claude-install.sh
+      # Source shell config to make claude available immediately
+      export PATH="$HOME/.local/bin:$PATH"
+      if command -v claude &>/dev/null; then
+        success "Claude Code installed successfully"
+      else
+        warning "Claude Code installed but not in PATH yet"
+        info "After reboot, run: source ~/.zprofile"
+      fi
+    else
+      warning "Claude Code installation script failed"
+      info "To install manually later: curl -fsSL https://claude.ai/install.sh | bash"
+      rm -f /tmp/claude-install.sh
+    fi
   else
-    warning "Claude Code installation failed (network issue?)"
-    info "To install manually: curl -fsSL https://claude.ai/install.sh | bash"
+    warning "Failed to download Claude Code installer (network issue?)"
+    info "To install manually later: curl -fsSL https://claude.ai/install.sh | bash"
   fi
 else
   success "Claude Code already installed"
@@ -168,20 +198,30 @@ else
   info "Then run: source ~/.zshrc && nvm install --lts"
 fi
 
-# Setup NvChad for Neovim
-info "Setting up NvChad..."
+# Setup LazyVim for Neovim
+info "Setting up LazyVim..."
+# Backup existing Neovim files
 if [ -d "$HOME/.config/nvim" ]; then
-  if [ -d "$HOME/.config/nvim.bak" ]; then
-    warning "Removing old nvim backup..."
-    rm -rf "$HOME/.config/nvim.bak" || true
-  fi
-  warning "Neovim config already exists, backing up to ~/.config/nvim.bak"
-  mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak" || warning "Backup failed"
+  warning "Backing up existing Neovim config..."
+  mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
 fi
-if git clone https://github.com/NvChad/starter "$HOME/.config/nvim" 2>/dev/null; then
-  success "NvChad installed"
+if [ -d "$HOME/.local/share/nvim" ]; then
+  mv "$HOME/.local/share/nvim" "$HOME/.local/share/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+fi
+if [ -d "$HOME/.local/state/nvim" ]; then
+  mv "$HOME/.local/state/nvim" "$HOME/.local/state/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+fi
+if [ -d "$HOME/.cache/nvim" ]; then
+  mv "$HOME/.cache/nvim" "$HOME/.cache/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+fi
+
+# Clone LazyVim starter
+if git clone https://github.com/LazyVim/starter "$HOME/.config/nvim" 2>/dev/null; then
+  # Remove .git folder as recommended by LazyVim docs
+  rm -rf "$HOME/.config/nvim/.git" 2>/dev/null || true
+  success "LazyVim installed"
 else
-  warning "NvChad installation failed (network issue or already exists)"
+  warning "LazyVim installation failed (network issue or already exists)"
 fi
 
 # Create necessary directories
@@ -284,11 +324,25 @@ success "Scripts are now executable"
 
 # Setup SDDM display manager
 info "Setting up SDDM display manager..."
-sudo mkdir -p /usr/share/sddm/themes
-sudo cp -r "$SCRIPT_DIR/sddm/themes/tokyo-night" /usr/share/sddm/themes/
-sudo cp "$SCRIPT_DIR/sddm/sddm.conf" /etc/sddm.conf
-sudo systemctl enable sddm.service
-success "SDDM installed and configured with Tokyo Night theme"
+if [ -d "$SCRIPT_DIR/sddm/themes/tokyo-night" ]; then
+  sudo mkdir -p /usr/share/sddm/themes
+
+  # Remove old theme if it exists
+  if [ -d "/usr/share/sddm/themes/tokyo-night" ]; then
+    sudo rm -rf /usr/share/sddm/themes/tokyo-night
+  fi
+
+  sudo cp -r "$SCRIPT_DIR/sddm/themes/tokyo-night" /usr/share/sddm/themes/
+  sudo chmod -R 755 /usr/share/sddm/themes/tokyo-night
+
+  sudo cp "$SCRIPT_DIR/sddm/sddm.conf" /etc/sddm.conf
+  sudo systemctl enable sddm.service
+  success "SDDM installed and configured with Tokyo Night theme"
+else
+  warning "SDDM theme not found at $SCRIPT_DIR/sddm/themes/tokyo-night"
+  info "SDDM will use default theme. You can customize it later."
+  sudo systemctl enable sddm.service
+fi
 
 # Enable services
 info "Enabling system services..."
@@ -299,7 +353,8 @@ success "Audio services enabled"
 
 info "Enabling network services..."
 sudo systemctl enable --now iwd.service
-success "iwd service enabled (use 'impala' command to manage WiFi)"
+sudo systemctl enable --now avahi-daemon.service
+success "iwd and avahi services enabled (use 'impala' command to manage WiFi)"
 
 # Change default shell to zsh
 if [ "$SHELL" != "/usr/bin/zsh" ]; then
@@ -322,7 +377,7 @@ echo "  2. Reboot your system"
 echo "  3. SDDM login screen will appear (Tokyo Night theme)"
 echo "  4. Select Hyprland session and log in"
 echo "  5. Start tmux (will auto-sync dev and data folders)"
-echo "  6. Open Neovim and run :MasonInstallAll for LSP support"
+echo "  6. Open Neovim - LazyVim will auto-install plugins (run :LazyHealth to verify)"
 echo ""
 info "SSH and Sync:"
 echo "  Restore from Dashlane : ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"

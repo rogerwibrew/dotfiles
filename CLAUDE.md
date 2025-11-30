@@ -31,7 +31,7 @@ Goals:
 - **OS**: Arch Linux
 - **Compositor**: Hyprland (Wayland)
 - **Shell**: zsh with syntax highlighting, vi mode, and auto-completion
-- **Text Editor**: Neovim with NvChad
+- **Text Editor**: Neovim with LazyVim
 - **Terminal**: Kitty with ligature support
 - **Browser**: Chromium
 - **PDF Viewer**: Zathura
@@ -212,16 +212,74 @@ visual consistency.
 
 ## Current Status
 
-Fully functional dotfiles system with:
+**Testing Phase on watt (laptop)** - Iterating on bootstrap script for
+reliability.
+
+Working features:
 - Complete Hyprland configuration with master layout
 - Tokyo Night theme across all components
-- Continuous sync to newton.local server via Unison
+- LazyVim for Neovim (switched from NvChad)
+- Continuous sync to newton.local server via Unison (kelvin only)
+- Avahi/mDNS for .local hostname resolution
 - Zsh shell with syntax highlighting, case-insensitive auto-completion,
   and vi mode
 - XDG Base Directory compliance for clean home directory
 - Modular shell configuration (.zprofile, .config/zsh/, .config/shell/)
 - All essential utilities and scripts
 - Hostname-specific configurations for kelvin (desktop) and watt (laptop)
+- 4K display support with proper scaling on watt
+- GB keyboard layout on watt
+- Automatic screen lock via swayidle (5 min idle, 10 min screen off)
+
+## Bootstrap Testing & Development Workflow
+
+### Current Testing Strategy
+
+We're iterating on the bootstrap script to ensure it works perfectly on
+fresh Arch installations. The workflow:
+
+1. **Test on watt (laptop)** - Run bootstrap, identify issues, fix
+2. **Iterate rapidly** - Bootstrap is idempotent (safe to run multiple
+   times)
+3. **Fresh install validation** - Do 1-2 complete reinstalls to verify
+   bootstrap works on first run
+4. **Deploy to kelvin (desktop)** - Only after watt testing is complete
+
+### Recent Improvements (2025-11-30)
+
+- ✅ Switched from NvChad to LazyVim
+- ✅ Added Avahi + nss-mdns for .local hostname resolution
+- ✅ Improved Claude Code installation with better error handling
+- ✅ Enhanced SDDM theme setup with proper permissions
+- ✅ Added 4K monitor configuration for watt
+- ✅ Set GB keyboard layout for watt
+- ✅ Made bootstrap more idempotent and fault-tolerant
+- ✅ Added clear execution order documentation in bootstrap script
+
+### Known Issues Being Monitored
+
+- SDDM login screen - Needs verification on fresh install
+- Claude Code - Installation reliability being improved
+- Bootstrap first-run success rate - Testing in progress
+
+### Pre-Deployment Checklist (Before moving to kelvin)
+
+Run these tests on watt after fresh Arch install:
+
+- [ ] Bootstrap completes without errors on first run
+- [ ] Hyprland starts and displays at correct 4K resolution
+- [ ] SDDM login screen appears and works
+- [ ] GB keyboard layout is active
+- [ ] WiFi/network connectivity works via NetworkManager
+- [ ] All key applications launch (kitty, chromium, nvim)
+- [ ] SSH keys can be restored (via Dashlane or USB scripts)
+- [ ] watt.local resolves from other machines on network
+- [ ] Claude Code is installed and functional
+- [ ] LazyVim launches and auto-installs plugins
+- [ ] swayidle locks screen after 5 minutes
+- [ ] Screen blanks (DPMS off) after 10 minutes
+- [ ] Power/volume/brightness controls work
+- [ ] Waybar displays correctly with all modules
 
 ## Success Criteria
 

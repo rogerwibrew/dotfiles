@@ -11,11 +11,13 @@ hyprpaper
 kitty
 
 # Editor
-neovim  # Requires version 0.11+ for NvChad
+neovim  # Requires version 0.10+ for LazyVim
 
 # Network Management
 iwd         # iNet wireless daemon (backend)
 impala      # TUI for managing WiFi
+avahi       # mDNS/DNS-SD for .local hostname resolution
+nss-mdns    # NSS module for mDNS hostname resolution
 
 # Development Tools
 base-devel  # Includes gcc, g++, make, and other build tools
@@ -113,6 +115,6 @@ nwg-look
 
 # Notes:
 # - All packages should be installed via yay (handles both official and AUR)
-# - NvChad will be cloned separately:
-#   git clone https://github.com/NvChad/starter ~/.config/nvim
+# - LazyVim will be cloned separately:
+#   git clone https://github.com/LazyVim/starter ~/.config/nvim
 # - nvm should be installed via the official script, not pacman
