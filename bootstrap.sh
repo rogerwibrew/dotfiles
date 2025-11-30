@@ -200,19 +200,19 @@ fi
 
 # Setup LazyVim for Neovim
 info "Setting up LazyVim..."
-# Backup existing Neovim files
+# Remove existing Neovim files
 if [ -d "$HOME/.config/nvim" ]; then
-  warning "Backing up existing Neovim config..."
-  mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+  warning "Removing existing Neovim config..."
+  rm -rf "$HOME/.config/nvim" 2>/dev/null || true
 fi
 if [ -d "$HOME/.local/share/nvim" ]; then
-  mv "$HOME/.local/share/nvim" "$HOME/.local/share/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+  rm -rf "$HOME/.local/share/nvim" 2>/dev/null || true
 fi
 if [ -d "$HOME/.local/state/nvim" ]; then
-  mv "$HOME/.local/state/nvim" "$HOME/.local/state/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+  rm -rf "$HOME/.local/state/nvim" 2>/dev/null || true
 fi
 if [ -d "$HOME/.cache/nvim" ]; then
-  mv "$HOME/.cache/nvim" "$HOME/.cache/nvim.bak.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+  rm -rf "$HOME/.cache/nvim" 2>/dev/null || true
 fi
 
 # Clone LazyVim starter
@@ -239,14 +239,13 @@ success "Home directory structure created (dev, data, downloads)"
 # Symlink configuration files
 info "Symlinking configuration files..."
 
-# Function to create symlink with backup
+# Function to create symlink
 create_symlink() {
   local source="$1"
   local target="$2"
 
   if [ -e "$target" ] || [ -L "$target" ]; then
-    warning "Backing up existing $target to ${target}.bak"
-    mv "$target" "${target}.bak"
+    rm -rf "$target"
   fi
 
   ln -sf "$source" "$target"
