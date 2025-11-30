@@ -358,7 +358,9 @@ success "Audio services enabled"
 info "Enabling network services..."
 sudo systemctl enable --now iwd.service
 sudo systemctl enable --now avahi-daemon.service
-success "iwd and avahi services enabled (use 'impala' command to manage WiFi)"
+sudo systemctl enable --now sshd.service
+success "Network services enabled (iwd, avahi, sshd)"
+info "SSH is now available - connect via: ssh roger@$(hostname).local"
 
 # Change default shell to zsh
 if [ "$SHELL" != "/usr/bin/zsh" ]; then
