@@ -2,7 +2,7 @@
 
 # Roots to sync
 root = /home/roger/data
-root = ssh://roger@newton//home/roger/data
+root = ssh://roger@newton.local//home/roger/data
 
 # Paths to sync (relative to roots)
 # Sync everything in data folder
@@ -33,3 +33,9 @@ sshargs = -C
 # Logging
 log = true
 logfile = /home/roger/.unison/newton-data.log
+
+# Continuous sync with file watching
+repeat = watch
+
+# Confirm before deleting large number of files
+confirmbigdel = true
