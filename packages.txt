@@ -48,6 +48,7 @@ waybar
 sddm
 qt6-svg
 qt6-declarative
+qt6-5compat  # Qt5 compatibility module for SDDM theme effects
 
 # Lock Screen & Idle Management
 swaylock-effects
