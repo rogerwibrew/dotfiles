@@ -2,9 +2,9 @@
 
 # Auto-start Unison sync in tmux on login
 if [[ -o interactive ]] && [[ -z "$TMUX" ]]; then
-  ~/dotfiles/scripts/sync/start-unison.sh >/dev/null 2>&1 &
+  ~/dotfiles/scripts/sync/start-unison.sh >/dev/null 2>&1 &!
   # Auto-pull dotfiles updates on login
-  ~/dotfiles/scripts/git/dotfiles-pull.sh >/dev/null 2>&1 &
+  ~/dotfiles/scripts/git/dotfiles-pull.sh >/dev/null 2>&1 &!
 fi
 
 # Enable colors
