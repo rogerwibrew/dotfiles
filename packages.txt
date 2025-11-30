@@ -94,6 +94,7 @@ brightnessctl
 # System Utilities
 polkit-kde-agent
 xdg-utils
+udisks2    # Disk management (provides udisksctl for mounting USB)
 fastfetch  # System information tool
 btop       # Resource monitor
 curl       # HTTP client (needed for various install scripts)
