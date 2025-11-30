@@ -248,7 +248,7 @@ create_symlink() {
     rm -rf "$target"
   fi
 
-  ln -sf "$source" "$target"
+  ln -sfn "$source" "$target"
   success "Linked $source -> $target"
 }
 
