@@ -274,6 +274,19 @@ fresh Arch installations. The workflow:
 - ✅ Added Super+B for chromium browser
 - ✅ Fixed path inconsistency (changed ~/.dotfiles to ~/dotfiles)
 
+**Waybar Status Bar:**
+- ✅ Added disk space module showing free space percentage with icon
+- ✅ Replaced all icons with Material Design Icons (MDI) for compatibility
+- ✅ All modules now display with proper icons (CPU, RAM, Disk, Network,
+  Audio, Battery)
+- ✅ Added Font Awesome as fallback font family
+
+**Unison Sync:**
+- ✅ Fixed data-sync profile (newton → newton.local hostname)
+- ✅ Start script now syncs BOTH dev and data folders
+- ✅ Dual tmux panes for monitoring both sync processes
+- ✅ Added repeat watch and confirmbigdel to data-sync profile
+
 ### Known Issues - All Resolved! ✅
 
 All major issues found during watt testing have been fixed:
@@ -282,27 +295,37 @@ All major issues found during watt testing have been fixed:
 - ✅ Bootstrap first-run package parsing fixed (SCRIPT_DIR timing)
 - ✅ mDNS .local hostname resolution working (nsswitch.conf configured)
 - ✅ SSH service enabled automatically
+- ✅ Waybar icons rendering correctly (switched to MDI icons)
+- ✅ Unison syncs both dev and data folders automatically
 
 **Ready for fresh install validation!**
+
+System has been tested iteratively on watt with all fixes applied and
+verified working. All commits pushed to main branch.
 
 ### Pre-Deployment Checklist (Before moving to kelvin)
 
 Run these tests on watt after fresh Arch install:
 
 - [ ] Bootstrap completes without errors on first run
-- [ ] Hyprland starts and displays at correct 4K resolution
-- [ ] SDDM login screen appears and works
-- [ ] GB keyboard layout is active
-- [ ] WiFi/network connectivity works via NetworkManager
+- [ ] Hyprland starts at correct 4K resolution (3840x2160@60, 2.5x scale)
+- [ ] SDDM Tokyo Night login screen displays correctly
+- [ ] GB keyboard layout is active (test @ and # keys)
+- [ ] WiFi/network connectivity works
+- [ ] SSH service running (can ssh to watt.local from other machines)
 - [ ] All key applications launch (kitty, chromium, nvim)
-- [ ] SSH keys can be restored (via Dashlane or USB scripts)
-- [ ] watt.local resolves from other machines on network
-- [ ] Claude Code is installed and functional
+- [ ] SSH keys can be restored via USB script
+- [ ] watt.local resolves from kelvin/newton (test: ping watt.local)
+- [ ] Claude Code installed and in PATH (claude --version works)
 - [ ] LazyVim launches and auto-installs plugins
-- [ ] swayidle locks screen after 5 minutes
-- [ ] Screen blanks (DPMS off) after 10 minutes
-- [ ] Power/volume/brightness controls work
-- [ ] Waybar displays correctly with all modules
+- [ ] Waybar displays with ALL icons visible:
+  - 󰻠 CPU, 󰍛 Memory, 󰋊 Disk, 󰖩 Network, 󰕿 Audio, 󰂎 Battery
+- [ ] Disk space module shows percentage free
+- [ ] swayidle locks screen after 5 minutes idle
+- [ ] Screen blanks (DPMS off) after 10 minutes idle
+- [ ] Super+B opens chromium
+- [ ] Unison starts automatically and syncs dev and data folders
+- [ ] Check tmux session 'unison' has two panes (dev-sync, data-sync)
 
 ## Success Criteria
 
