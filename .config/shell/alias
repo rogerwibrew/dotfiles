@@ -3,7 +3,7 @@
 # Add your custom aliases here
 
 # Current aliases from original .zshrc
-alias ls='eza'
+alias ls='eza -l --git -o --icons="auto"'
 alias ll='eza -l'
 alias la='eza -la'
 alias lt='eza --tree'

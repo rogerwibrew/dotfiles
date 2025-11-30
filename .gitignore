@@ -50,3 +50,4 @@ Thumbs.db
 !.config/*/*.css
 !.config/*/*.prf
 !.config/*/*.sh
+scripts/scripts
