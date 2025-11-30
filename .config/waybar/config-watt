@@ -9,6 +9,7 @@
     "modules-right": [
         "pulseaudio",
         "network",
+        "disk",
         "cpu",
         "memory",
         "temperature",
@@ -63,6 +64,13 @@
     "memory": {
         "format": " {percentage}%",
         "tooltip-format": "{used:0.1f}G / {total:0.1f}G used"
+    },
+
+    "disk": {
+        "interval": 30,
+        "format": " {percentage_free}%",
+        "path": "/",
+        "tooltip-format": "{free} free of {total} ({percentage_used}% used)"
     },
 
     "temperature": {
