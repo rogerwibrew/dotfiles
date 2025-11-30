@@ -32,3 +32,21 @@ Thumbs.db
 
 # Backup files created by bootstrap
 *.bak
+
+# Unison sync archives and state
+.config/unison/ar*
+.config/unison/fp*
+
+# Zsh completion cache
+.config/zsh/.zcompdump
+.config/zsh/.zcompdump.*
+
+# Yazi file manager state
+.config/yazi/
+
+# Prevent circular symlinks (directories linking to themselves)
+.config/*/*
+!.config/*/*.conf
+!.config/*/*.css
+!.config/*/*.prf
+!.config/*/*.sh
