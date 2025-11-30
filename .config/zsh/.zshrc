@@ -1,5 +1,9 @@
 # Zsh configuration for Roger's dotfiles
 
+# Ensure local binaries are in PATH
+export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
+
 # Auto-start Unison sync in tmux on login
 if [[ -o interactive ]] && [[ -z "$TMUX" ]]; then
   ~/dotfiles/scripts/sync/start-unison.sh >/dev/null 2>&1 &!
