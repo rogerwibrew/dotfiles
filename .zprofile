@@ -52,5 +52,11 @@ export VISUAL="nvim"
 export TERMINAL="kitty"
 export BROWSER="chromium"
 
+# Add local binaries to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Add cargo binaries to PATH if cargo is installed
+[[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
+
 # Load zshrc from ZDOTDIR
 [[ -f "$ZDOTDIR/.zshrc" ]] && source "$ZDOTDIR/.zshrc"
