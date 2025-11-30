@@ -1,6 +1,5 @@
 #!/bin/bash
 # Restore SSH keys from USB stick backup
-# Alternative to restore-ssh-from-dashlane.sh for offline recovery
 
 set -e # Exit on error
 

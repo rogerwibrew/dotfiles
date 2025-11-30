@@ -8,7 +8,7 @@
 # 2. Install yay AUR helper
 # 3. System update
 # 4. Install all packages (official repos + AUR)
-# 5. Install external tools (Dashlane, Claude Code, nvm, LazyVim)
+# 5. Install external tools (Claude Code, nvm, LazyVim)
 # 6. Create directory structure
 # 7. Symlink configurations
 # 8. Setup SDDM theme
@@ -128,11 +128,6 @@ info "Installing AUR packages..."
 yay -S --needed --noconfirm hyprpicker wlogout 2>/dev/null ||
   warning "Some AUR packages may have failed"
 
-# Install Dashlane CLI (not available on AUR)
-info "Installing Dashlane CLI..."
-"$SCRIPT_DIR/scripts/setup/install-dashlane-cli.sh" ||
-  warning "Dashlane CLI installation failed"
-
 # Install Claude Code (native installation via official script)
 info "Installing Claude Code..."
 if ! command -v claude &>/dev/null; then
@@ -186,8 +181,9 @@ if [ -d "$NVM_DIR" ] && [ -s "$NVM_DIR/nvm.sh" ]; then
   # Source nvm to make it available in this shell
   if \. "$NVM_DIR/nvm.sh" 2>/dev/null; then
     if nvm install --lts 2>/dev/null && nvm use --lts 2>/dev/null; then
-      success "Node.js LTS installed"
-      node --version 2>/dev/null || true
+      NODE_VERSION=$(node --version 2>/dev/null || echo "unknown")
+      success "Node.js LTS installed ($NODE_VERSION)"
+      info "Note: 'node' command will be available after opening a new shell or rebooting"
     else
       warning "Failed to install Node.js via nvm"
       info "After reboot, try: source ~/.zprofile && nvm install --lts"
@@ -385,9 +381,8 @@ echo ""
 success "Bootstrap complete!"
 echo ""
 info "Next steps:"
-echo "  1. Restore SSH keys (choose one method):"
-echo "     From Dashlane: ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"
-echo "     From USB:     ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh"
+echo "  1. Restore SSH keys from USB:"
+echo "     ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh"
 echo "  2. Run first-time Unison sync:"
 echo "     ~/dotfiles/scripts/sync/first-sync.sh"
 echo "  3. Reboot your system"
@@ -397,7 +392,6 @@ echo "  6. Unison will auto-sync dev and data folders in background"
 echo "  7. Open Neovim - LazyVim will auto-install plugins (run :LazyHealth to verify)"
 echo ""
 info "SSH and Sync:"
-echo "  Restore from Dashlane : ~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh"
 echo "  Restore from USB      : ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh"
 echo "  Backup to USB         : ~/dotfiles/scripts/ssh/backup-ssh-to-usb.sh"
 echo "  Connect to newton     : ~/dotfiles/scripts/ssh/connect-newton.sh"
