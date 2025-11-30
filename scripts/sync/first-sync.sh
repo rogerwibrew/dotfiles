@@ -50,13 +50,15 @@ fi
 
 # Sync dev folder
 echo ""
-info "Syncing ~/dev from newton.local (ignoring old archives)..."
+echo "========================================"
+info "Starting sync for ~/dev from newton.local"
+echo "========================================"
 echo ""
 warning "Unison will show changes and ask for confirmation"
 info "Recommended: Press 'f' to follow Unison's recommendations (prefer newer files)"
 info "Or press '>' to prefer all files from newton (pull everything down)"
 echo ""
-read -p "Press Enter to continue..."
+sleep 3  # Give time to read instructions
 
 if unison dev-sync -ignorearchives -batch=false; then
   success "dev-sync completed successfully"
@@ -66,9 +68,11 @@ fi
 
 # Sync data folder
 echo ""
-info "Syncing ~/data from newton.local (ignoring old archives)..."
+echo "========================================"
+info "dev-sync complete! Now syncing data folder..."
+echo "========================================"
 echo ""
-read -p "Press Enter to continue..."
+sleep 2  # Brief pause to show message
 
 if unison data-sync -ignorearchives -batch=false; then
   success "data-sync completed successfully"
