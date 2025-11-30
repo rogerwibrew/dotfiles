@@ -362,6 +362,15 @@ sudo systemctl enable --now sshd.service
 success "Network services enabled (iwd, avahi, sshd)"
 info "SSH is now available - connect via: ssh roger@$(hostname).local"
 
+# Configure nss-mdns for .local hostname resolution
+info "Configuring mDNS hostname resolution..."
+if ! grep -q "mdns_minimal" /etc/nsswitch.conf; then
+  sudo sed -i '/^hosts:/ s/resolve/mdns_minimal [NOTFOUND=return] resolve/' /etc/nsswitch.conf
+  success "mDNS configured in /etc/nsswitch.conf"
+else
+  success "mDNS already configured"
+fi
+
 # Change default shell to zsh
 if [ "$SHELL" != "/usr/bin/zsh" ]; then
   info "Changing default shell to zsh..."
