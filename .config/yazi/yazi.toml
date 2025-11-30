@@ -1,0 +1,41 @@
+# Yazi Configuration File
+# Documentation: https://yazi-rs.github.io/docs/configuration/yazi
+# Schema: https://yazi-rs.github.io/schemas/yazi.json
+#
+# This file customizes yazi's general behavior. Yazi automatically merges
+# your settings here with the built-in defaults from yazi-default.toml.
+# You only need to specify the settings you want to change.
+#
+# View defaults: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/yazi-default.toml
+
+# [mgr]
+# ratio = [1, 4, 3]           # Layout: parent:current:preview (default: [1, 4, 3])
+# sort_by = "alphabetical"    # Sorting method (default: "alphabetical")
+# sort_sensitive = false      # Case-sensitive sorting (default: false)
+# sort_dir_first = true       # Show directories first (default: true)
+# show_hidden = false         # Show hidden files (default: false)
+# show_symlink = true         # Show symlink targets (default: true)
+# linemode = "none"           # Line display mode: "none", "size", "mtime", "permissions"
+
+# [preview]
+# tab_size = 2                # Tab width for text preview (default: 2)
+# max_width = 600             # Max preview width in pixels (default: 600)
+# max_height = 900            # Max preview height in pixels (default: 900)
+# image_quality = 75          # JPEG quality for image cache (50-90, default: 75)
+# ueberzug_scale = 1          # Image scaling factor (default: 1)
+# ueberzug_offset = [0, 0, 0, 0]  # Image offset [x, y, width, height]
+
+# [opener]
+# Edit this section to customize how yazi opens different file types
+# See defaults for examples of platform-specific openers
+
+# [open]
+# Define rules for which opener to use for different file types
+# See defaults for MIME type and pattern matching examples
+
+# [tasks]
+# micro_workers = 10          # Number of concurrent micro tasks (default: 10)
+# macro_workers = 25          # Number of concurrent macro tasks (default: 25)
+# bizarre_retry = 5           # Retry attempts for failed operations (default: 5)
+# image_alloc = 536870912     # Memory allocation for image ops in bytes (default: 512MB)
+# image_bound = [0, 0]        # Image dimension bounds [width, height] (0 = unlimited)

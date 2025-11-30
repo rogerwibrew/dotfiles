@@ -1,0 +1,58 @@
+# Yazi Theme Configuration
+# Documentation: https://yazi-rs.github.io/docs/configuration/theme
+# Schema: https://yazi-rs.github.io/schemas/theme.json
+#
+# This file customizes yazi's colors and appearance. Yazi automatically
+# loads theme-dark.toml or theme-light.toml based on your terminal mode.
+# You only need to specify the colors you want to override.
+#
+# View defaults:
+# - Dark:  https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/theme-dark.toml
+# - Light: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/theme-light.toml
+#
+# Browse community themes: https://github.com/yazi-rs/flavors
+
+# Tokyo Night Color Palette (for reference)
+# Background:  #1a1b26
+# Foreground:  #c0caf5
+# Black:       #15161e
+# Red:         #f7768e
+# Green:       #9ece6a
+# Yellow:      #e0af68
+# Blue:        #7aa2f7
+# Magenta:     #bb9af7
+# Cyan:        #7dcfff
+# White:       #a9b1d6
+
+# Example: Customize the file manager colors to match Tokyo Night
+# [mgr]
+# cwd = { fg = "#7aa2f7" }                    # Current directory (blue)
+# hovered = { reversed = true }               # Selected item
+# preview_hovered = { underline = true }      # Hovered in preview
+# find_keyword = { fg = "#e0af68", bold = true }  # Search highlight (yellow)
+# marker_selected = { fg = "#9ece6a", bg = "#1a1b26" }  # Selected marker (green)
+
+# Example: Customize tab appearance
+# [tabs]
+# active = { fg = "#c0caf5", bg = "#1a1b26" }      # Active tab
+# inactive = { fg = "#a9b1d6", bg = "#15161e" }    # Inactive tab
+
+# Example: Customize status bar
+# [status]
+# separator_open = ""
+# separator_close = ""
+# mode_normal = { fg = "#1a1b26", bg = "#7aa2f7", bold = true }  # Normal mode (blue)
+# mode_select = { fg = "#1a1b26", bg = "#9ece6a", bold = true }  # Select mode (green)
+
+# Example: File type colors
+# [filetype]
+# rules = [
+#   { mime = "image/*", fg = "#bb9af7" },          # Images (magenta)
+#   { mime = "video/*", fg = "#7dcfff" },          # Videos (cyan)
+#   { mime = "audio/*", fg = "#e0af68" },          # Audio (yellow)
+#   { mime = "application/zip", fg = "#f7768e" },  # Archives (red)
+# ]
+
+# To use a pre-made flavor from the community:
+# [flavor]
+# use = "tokyo-night"  # If available in ~/.config/yazi/flavors/

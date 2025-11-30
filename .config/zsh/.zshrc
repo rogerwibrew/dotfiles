@@ -52,6 +52,17 @@ git_prompt_info() {
   echo " %F{magenta}$branch%f $git_status"
 }
 
+# Yazi file manager wrapper - allows changing directory on exit
+y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  if [ -f "$tmp" ]; then
+    IFS= read -r -d '' cwd < "$tmp"
+    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+  fi
+}
+
 # Prompt - simple and clean with hostname and git info
 setopt PROMPT_SUBST
 PROMPT='%F{cyan}%m%f %F{blue}%~%f$(git_prompt_info) %F{cyan}❯%f '

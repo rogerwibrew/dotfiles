@@ -1,0 +1,56 @@
+# Yazi Keymap Configuration
+# Documentation: https://yazi-rs.github.io/docs/configuration/keymap
+# Schema: https://yazi-rs.github.io/schemas/keymap.json
+#
+# This file customizes yazi's keybindings. Yazi uses vim-style navigation
+# by default (hjkl). You only need to specify custom keybindings here.
+#
+# View defaults: https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/keymap-default.toml
+#
+# Configuration layers:
+# - [mgr]     = File manager interface
+# - [tasks]   = Task manager
+# - [spot]    = File spotlight/preview
+# - [pick]    = Selection picker
+# - [input]   = Text input fields
+# - [confirm] = Confirmation dialogs
+# - [cmp]     = Completion menu
+# - [help]    = Help screen
+#
+# Use prepend_keymap to add bindings before defaults (higher priority)
+# Use append_keymap to add bindings after defaults (lower priority)
+# Use keymap to completely override defaults
+
+# Example: Add custom keybindings to the file manager
+# [mgr]
+# prepend_keymap = [
+#   { on = "<C-n>", run = "create", desc = "Create a new file" },
+#   { on = "<C-r>", run = "rename", desc = "Rename file" },
+# ]
+
+# Example: Override tab navigation
+# [mgr]
+# prepend_keymap = [
+#   { on = "1", run = "tab_switch 0", desc = "Switch to tab 1" },
+#   { on = "2", run = "tab_switch 1", desc = "Switch to tab 2" },
+#   { on = "3", run = "tab_switch 2", desc = "Switch to tab 3" },
+# ]
+
+# Example: Custom shell commands
+# [mgr]
+# prepend_keymap = [
+#   { on = "e", run = 'shell "$EDITOR \"$@\""', desc = "Edit in $EDITOR" },
+#   { on = "g", run = 'shell "lazygit"', desc = "Open lazygit" },
+# ]
+
+# Default keybindings reference (most useful):
+# h/j/k/l     - Navigate (left/down/up/right)
+# g/G         - Go to top/bottom
+# Space       - Select/deselect file
+# v           - Visual mode (select multiple)
+# y/d/p       - Yank/delete/paste
+# /           - Search
+# f/F         - Find file/folder
+# z           - Jump with zoxide
+# ~           - Help menu
+# q           - Quit

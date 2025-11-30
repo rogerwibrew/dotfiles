@@ -67,6 +67,15 @@ cliphist
 
 # File Manager (terminal-based)
 yazi
+ffmpeg           # Video thumbnails in yazi
+p7zip            # Archive extraction in yazi
+jq               # JSON preview in yazi
+poppler          # PDF preview in yazi (provides pdftoppm)
+fd               # Fast file searching in yazi
+ripgrep          # Content searching in yazi
+fzf              # Fuzzy file navigation in yazi
+zoxide           # Smart directory jumping in yazi
+imagemagick      # Extended image format support in yazi
 
 # PDF Viewer
 zathura
