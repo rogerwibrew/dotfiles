@@ -247,20 +247,43 @@ fresh Arch installations. The workflow:
 
 ### Recent Improvements (2025-11-30)
 
+**Editor & Display:**
 - ✅ Switched from NvChad to LazyVim
-- ✅ Added Avahi + nss-mdns for .local hostname resolution
-- ✅ Improved Claude Code installation with better error handling
-- ✅ Enhanced SDDM theme setup with proper permissions
-- ✅ Added 4K monitor configuration for watt
+- ✅ Added 4K monitor configuration for watt (2.5x scaling)
 - ✅ Set GB keyboard layout for watt
+
+**Networking:**
+- ✅ Added Avahi + nss-mdns for .local hostname resolution
+- ✅ Auto-configure /etc/nsswitch.conf for mDNS in bootstrap
+- ✅ Auto-enable sshd service for immediate SSH access
+
+**Bootstrap Reliability:**
+- ✅ Fixed CRITICAL first-run bug: Set SCRIPT_DIR before any cd commands
+- ✅ Explicitly install grep/sed in essential utilities
+- ✅ Improved Claude Code installation with better error handling
+- ✅ Added ~/.local/bin to PATH for Claude Code and other tools
 - ✅ Made bootstrap more idempotent and fault-tolerant
 - ✅ Added clear execution order documentation in bootstrap script
 
-### Known Issues Being Monitored
+**SDDM Login Screen:**
+- ✅ Added qt6-5compat package for Tokyo Night theme graphical effects
+- ✅ Enhanced SDDM theme setup with proper permissions
+- ✅ Tokyo Night theme now displays correctly on fresh installs
 
-- SDDM login screen - Needs verification on fresh install
-- Claude Code - Installation reliability being improved
-- Bootstrap first-run success rate - Testing in progress
+**Keybindings:**
+- ✅ Added Super+B for chromium browser
+- ✅ Fixed path inconsistency (changed ~/.dotfiles to ~/dotfiles)
+
+### Known Issues - All Resolved! ✅
+
+All major issues found during watt testing have been fixed:
+- ✅ SDDM Tokyo Night theme working (qt6-5compat added)
+- ✅ Claude Code PATH issue resolved (~/.local/bin in PATH)
+- ✅ Bootstrap first-run package parsing fixed (SCRIPT_DIR timing)
+- ✅ mDNS .local hostname resolution working (nsswitch.conf configured)
+- ✅ SSH service enabled automatically
+
+**Ready for fresh install validation!**
 
 ### Pre-Deployment Checklist (Before moving to kelvin)
 
