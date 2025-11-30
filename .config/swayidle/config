@@ -5,8 +5,10 @@
 timeout 300 'swaylock -f'
 
 # Turn off displays after 10 minutes
-timeout 600 'hyprctl dispatch dpms off' \
-     resume 'hyprctl dispatch dpms on'
+timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+
+# Suspend system after 15 minutes of inactivity
+timeout 900 'systemctl suspend'
 
 # Lock before sleep (suspend/hibernate)
 before-sleep 'swaylock -f'
