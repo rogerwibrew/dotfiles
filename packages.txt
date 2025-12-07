@@ -84,6 +84,10 @@ zathura-pdf-mupdf
 # Browser
 chromium
 
+# Scanner
+sane              # Scanner backend library
+sane-airscan      # Modern driverless scanner support
+
 # Fonts
 ttf-jetbrains-mono-nerd
 ttf-font-awesome
@@ -122,6 +126,7 @@ nwg-look
 # AUR Packages (install with yay)
 # hyprpicker (color picker for Wayland)
 # wlogout (logout menu)
+# simple-scan-linuxmint (GNOME scanner app, GTK3 version)
 
 # Notes:
 # - All packages should be installed via yay (handles both official and AUR)

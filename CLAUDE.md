@@ -36,6 +36,7 @@ Goals:
 - **Terminal**: Kitty with ligature support
 - **Browser**: Chromium
 - **PDF Viewer**: Zathura
+- **Scanner**: simple-scan (linuxmint GTK3 version)
 - **File Manager**: yazi (terminal-based)
 
 ### Wayland Ecosystem Tools
@@ -486,36 +487,44 @@ and watt to ensure reproducible deployment from fresh Arch install.
 3. **Fresh bootstrap test on watt** - Run the full bootstrap script and
    capture any failures
 4. **Fix watt issues** - Address any problems discovered during testing
-5. **Verify watt-specific features**:
+5. **Test scanner app on watt** - Verify AUR scanner packages work correctly
+   before kelvin deployment
+   - Install: `yay -S --needed simple-scan-linuxmint sane sane-airscan`
+   - Launch scanner app and verify it detects connected scanner
+   - Test basic scan functionality
+6. **Verify watt-specific features**:
    - 4K display at 2.5x scaling (3840x2160@60)
    - GB keyboard layout (@ and # keys work correctly)
    - Battery indicator in Waybar
    - All Waybar modules display with MDI icons
-6. **Test Unison sync on watt**:
+7. **Test Unison sync on watt**:
    - SSH to newton.local works
    - Both dev and data folders sync automatically
    - Tmux session 'unison' has two panes running
 
 #### Phase 3: Kelvin (Desktop) Deployment
 
-7. **Deploy to kelvin** - Run bootstrap.sh on the desktop
-8. **Verify kelvin-specific features**:
-   - Display at 1.666667x scaling
-   - No battery indicator in Waybar
-   - All other Waybar modules present
-9. **Test Unison sync on kelvin**:
-   - SSH to newton.local works
-   - Both dev and data folders sync automatically
-   - Tmux session working correctly
+8. **Deploy to kelvin** - Run bootstrap.sh on the desktop
+9. **Test scanner app on kelvin** - Verify scanner works on desktop as well
+   - Should already be installed via packages.txt
+   - Test basic scan functionality on desktop
+10. **Verify kelvin-specific features**:
+    - Display at 1.666667x scaling
+    - No battery indicator in Waybar
+    - All other Waybar modules present
+11. **Test Unison sync on kelvin**:
+    - SSH to newton.local works
+    - Both dev and data folders sync automatically
+    - Tmux session working correctly
 
 #### Phase 4: Final Validation
 
-10. **Cross-machine validation**:
+12. **Cross-machine validation**:
     - Test file sync between kelvin ↔ watt ↔ newton
     - Verify conflicts resolve correctly (prefer newer)
     - Test webapp installations work
     - Confirm SDDM Tokyo Night theme displays on both
-11. **Documentation** - Record any machine-specific quirks or manual steps
+13. **Documentation** - Record any machine-specific quirks or manual steps
 
 ### Key Validation Criteria
 
