@@ -467,6 +467,65 @@ Critical for bootstrap success:
 - **grep/sed**: Installed early as essential utilities (bootstrap.sh:59)
 - **SSH key**: Must be restored before Unison can start syncing
 
+## Current Project Goal
+
+**Objective**: Complete and fully test the bootstrap script on both kelvin
+and watt to ensure reproducible deployment from fresh Arch install.
+
+### Testing & Validation Plan
+
+#### Phase 1: Current State Assessment
+
+1. **Review bootstrap.sh** - Identify any potential issues or untested code
+   paths
+2. **Check watt status** - Document what's currently working/broken on the
+   laptop
+
+#### Phase 2: Watt (Laptop) Testing & Fixes
+
+3. **Fresh bootstrap test on watt** - Run the full bootstrap script and
+   capture any failures
+4. **Fix watt issues** - Address any problems discovered during testing
+5. **Verify watt-specific features**:
+   - 4K display at 2.5x scaling (3840x2160@60)
+   - GB keyboard layout (@ and # keys work correctly)
+   - Battery indicator in Waybar
+   - All Waybar modules display with MDI icons
+6. **Test Unison sync on watt**:
+   - SSH to newton.local works
+   - Both dev and data folders sync automatically
+   - Tmux session 'unison' has two panes running
+
+#### Phase 3: Kelvin (Desktop) Deployment
+
+7. **Deploy to kelvin** - Run bootstrap.sh on the desktop
+8. **Verify kelvin-specific features**:
+   - Display at 1.666667x scaling
+   - No battery indicator in Waybar
+   - All other Waybar modules present
+9. **Test Unison sync on kelvin**:
+   - SSH to newton.local works
+   - Both dev and data folders sync automatically
+   - Tmux session working correctly
+
+#### Phase 4: Final Validation
+
+10. **Cross-machine validation**:
+    - Test file sync between kelvin ↔ watt ↔ newton
+    - Verify conflicts resolve correctly (prefer newer)
+    - Test webapp installations work
+    - Confirm SDDM Tokyo Night theme displays on both
+11. **Documentation** - Record any machine-specific quirks or manual steps
+
+### Key Validation Criteria
+
+- ✅ Bootstrap runs without errors on fresh install (both machines)
+- ✅ All hostname-specific configs apply correctly
+- ✅ Unison auto-starts and syncs bidirectionally
+- ✅ All GUI elements (Waybar, SDDM) display correctly
+- ✅ No hardcoded paths, fully portable
+- ✅ Idempotent - safe to run multiple times
+
 ## Success Criteria
 
 - Can clone dotfiles repo on fresh Arch install
