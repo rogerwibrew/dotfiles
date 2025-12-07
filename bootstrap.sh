@@ -88,8 +88,14 @@ if ! command -v yay &>/dev/null; then
   git clone https://aur.archlinux.org/yay.git
   cd yay
   makepkg -si --noconfirm
-  cd ~
-  success "yay installed"
+  cd "$HOME"
+
+  # Verify yay was actually installed
+  if command -v yay &>/dev/null; then
+    success "yay installed"
+  else
+    error "yay installation failed - cannot continue"
+  fi
 else
   success "yay already installed"
 fi
@@ -315,7 +321,7 @@ create_symlink "$SCRIPT_DIR/scripts" "$HOME/scripts"
 
 # Copy wallpapers
 if [ -d "$SCRIPT_DIR/wallpapers" ] &&
-  [ "$(ls -A $SCRIPT_DIR/wallpapers)" ]; then
+  [ "$(ls -A "$SCRIPT_DIR/wallpapers")" ]; then
   info "Copying wallpapers..."
   cp -r "$SCRIPT_DIR/wallpapers/"* "$HOME/.local/share/wallpapers/"
   success "Wallpapers copied"
@@ -358,10 +364,10 @@ fi
 
 # Enable services
 info "Enabling system services..."
-systemctl --user enable --now pipewire.service
-systemctl --user enable --now pipewire-pulse.service
-systemctl --user enable --now wireplumber.service
-success "Audio services enabled"
+systemctl --user enable --now pipewire.service 2>/dev/null || warning "Failed to enable pipewire (may need user session)"
+systemctl --user enable --now pipewire-pulse.service 2>/dev/null || warning "Failed to enable pipewire-pulse (may need user session)"
+systemctl --user enable --now wireplumber.service 2>/dev/null || warning "Failed to enable wireplumber (may need user session)"
+success "Audio services configured (will start on login)"
 
 info "Enabling network services..."
 sudo systemctl enable --now iwd.service
