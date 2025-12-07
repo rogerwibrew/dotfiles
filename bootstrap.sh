@@ -27,6 +27,9 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Array to track failures/warnings
+declare -a FAILURES=()
+
 # Helper functions
 info() {
   echo -e "${BLUE}[INFO]${NC} $1"
@@ -38,6 +41,7 @@ success() {
 
 warning() {
   echo -e "${YELLOW}[WARNING]${NC} $1"
+  FAILURES+=("$1")
 }
 
 error() {
@@ -382,6 +386,23 @@ if [ "$SHELL" != "/usr/bin/zsh" ]; then
   success "Default shell changed to zsh (takes effect on next login)"
 else
   success "Default shell is already zsh"
+fi
+
+# Display failure summary if there were any warnings
+if [ ${#FAILURES[@]} -gt 0 ]; then
+  echo ""
+  echo -e "${RED}═══════════════════════════════════════════════════════════${NC}"
+  echo -e "${RED}                    WARNINGS/FAILURES SUMMARY              ${NC}"
+  echo -e "${RED}═══════════════════════════════════════════════════════════${NC}"
+  echo ""
+  for i in "${!FAILURES[@]}"; do
+    echo -e "${YELLOW}[$((i+1))]${NC} ${FAILURES[$i]}"
+  done
+  echo ""
+  echo -e "${RED}═══════════════════════════════════════════════════════════${NC}"
+  echo -e "${YELLOW}Total warnings: ${#FAILURES[@]}${NC}"
+  echo -e "${RED}═══════════════════════════════════════════════════════════${NC}"
+  echo ""
 fi
 
 # Final setup instructions
