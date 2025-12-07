@@ -11,9 +11,10 @@
 # 5. Install external tools (Claude Code, nvm, LazyVim)
 # 6. Create directory structure
 # 7. Symlink configurations
-# 8. Setup SDDM theme
-# 9. Enable system services
-# 10. Change default shell to zsh
+# 8. Install web applications from webapps.txt
+# 9. Setup SDDM theme
+# 10. Enable system services
+# 11. Change default shell to zsh
 #
 # Note: This script is designed to be idempotent (safe to run multiple times)
 
@@ -320,6 +321,14 @@ fi
 info "Making scripts executable..."
 find "$SCRIPT_DIR/scripts" -type f -name "*.sh" -exec chmod +x {} \;
 success "Scripts are now executable"
+
+# Install web applications
+info "Installing web applications..."
+if [ -f "$SCRIPT_DIR/scripts/setup/install-webapps.sh" ]; then
+  "$SCRIPT_DIR/scripts/setup/install-webapps.sh" || warning "Webapp installation had some issues"
+else
+  warning "Webapp installer not found, skipping"
+fi
 
 # Setup SDDM display manager
 info "Setting up SDDM display manager..."

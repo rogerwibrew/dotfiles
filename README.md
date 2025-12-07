@@ -159,6 +159,48 @@ Change wallpaper dynamically:
 hyprctl hyprpaper wallpaper ",~/.local/share/wallpapers/new.jpg"
 ```
 
+## Web Applications
+
+The bootstrap automatically installs web applications defined in
+`webapps/webapps.txt`. Each webapp runs in a standalone Chromium window
+with its own desktop entry and icon.
+
+### Pre-installed Webapps
+
+- **Claude**: AI assistant at claude.ai
+- **Gmail**: Email at mail.google.com
+- **Keep**: Notes at keep.google.com
+- **Chat GTP**: ChatGPT at chatgpt.com
+
+Launch webapps from the app launcher (Super + D) or add keybindings in
+Hyprland config.
+
+### Adding New Webapps
+
+To add a new webapp to the dotfiles:
+
+1. Add entry to `webapps/webapps.txt`:
+   ```
+   App Name|https://example.com|icon-filename.svg
+   ```
+
+2. Place icon in `webapps/icons/` directory (optional, uses chromium
+   icon if not provided)
+
+3. Run bootstrap or install manually:
+   ```bash
+   ~/dotfiles/scripts/webapp/install-webapp.sh  # Interactive
+   ~/dotfiles/scripts/setup/install-webapps.sh  # From webapps.txt
+   ```
+
+Icons can be downloaded from [dashboardicons.com](https://dashboardicons.com/).
+
+### Removing Webapps
+
+```bash
+~/dotfiles/scripts/webapp/remove-webapp.sh
+```
+
 ## Post-Install Steps
 
 1. Restore SSH key from USB: `~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh`

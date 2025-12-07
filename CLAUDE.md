@@ -1,16 +1,17 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working
+with code in this repository.
 
 ## Project Overview
 
 This repository contains a complete, reproducible dotfiles system for Arch
 Linux with Hyprland. The core concept: clone this repo on a fresh Arch
-install, run the bootstrap script, and have a fully functional window manager
-with all configurations, scripts, and tools ready to use.
+install, run the bootstrap script, and have a fully functional window
+manager with all configurations, scripts, and tools ready to use.
 
 Goals:
+
 - **Beautiful but simple**: Clean aesthetics without unnecessary complexity
 - **Terminal-first**: If it can be done in the terminal, do it there
 - **Minimal GUI**: Only browser and PDF viewer as GUI applications
@@ -42,7 +43,7 @@ Goals:
 - **Status Bar**: Waybar with Tokyo Night theme
 - **Launcher**: wofi
 - **Lock Screen**: swaylock-effects
-- **Idle Management**: swayidle
+- **Idle Management**: swayidle (5 min idle → lock, 10 min → screen off)
 - **Notifications**: mako
 - **Screenshots**: grim + slurp
 - **Clipboard**: wl-clipboard + cliphist
@@ -52,136 +53,250 @@ Goals:
 
 - **Session Manager**: tmux with Tokyo Night theme
 - **Sync Tool**: Unison with continuous file watching
-- **Server**: newton.local (SSH with ed25519 keys)
-- **Synced Folder**: ~/dev
+- **Server**: newton.local (SSH with ed25519 keys, Avahi mDNS)
+- **Synced Folders**: ~/dev and ~/data
 - **Version Control**: git
 
-## Common Commands
+## Core Architecture
 
-### Bootstrap and Setup
+### Configuration Deployment System
+
+The dotfiles use **direct symlinking** (not GNU stow) via bootstrap.sh:
+
+- Configs live in `~/dotfiles/.config/`
+- Bootstrap creates symlinks: `~/.config/hypr` → `~/dotfiles/.config/hypr`
+- Idempotent: Safe to run bootstrap.sh multiple times
+- Hostname detection at runtime chooses kelvin vs watt configs
+- See bootstrap.sh:1-18 for detailed execution order
+
+After bootstrap, editing files in `~/dotfiles/.config/` directly updates
+the active configuration (no re-bootstrap needed).
+
+### Hostname-Specific Configuration Pattern
+
+Two-layer config system for desktop vs laptop:
+
+- **Base configs**: `.config/hypr/hyprland.conf` (reference/fallback)
+- **Host-specific**: `.config/hypr/hyprland-kelvin.conf`,
+  `hyprland-watt.conf`
+- **Runtime selection**: Bootstrap symlinks correct config based on
+  `$(hostname)`
+- **Waybar**: Separate `config-kelvin` and `config-watt` for
+  battery/scaling differences
+
+Key differences:
+
+- **kelvin** (desktop): 1.666667x scaling, no battery indicator
+- **watt** (laptop): 2.5x scaling (4K display), battery indicator,
+  GB keyboard layout
+
+### XDG Base Directory Compliance
+
+Clean home directory via `.zprofile` environment variables:
+
+- `XDG_CONFIG_HOME=~/.config` - All application configs
+- `XDG_DATA_HOME=~/.local/share` - Application data (nvm, cargo, etc)
+- `XDG_CACHE_HOME=~/.cache` - Temporary data (zsh history, python history)
+
+Forces XDG compliance for: zsh, python, cargo, go, nvm, npm, gnupg,
+gradle, wget.
+
+Result: Clean `~/` with only `dev/`, `data/`, `downloads/` directories.
+
+### Unison Bidirectional Sync Architecture
+
+Continuous real-time sync to newton.local server:
+
+- **Auto-start**: `start-unison.sh` called from .zshrc on login
+- **Dual sync**: Both `~/dev` and `~/data` folders synced independently
+- **Tmux session**: Named "unison" with two panes (dev-sync, data-sync)
+- **File watching**: `repeat = watch` mode in Unison profiles
+- **Conflict resolution**: Auto-resolve via `prefer = newer`
+- **Profiles**: `.config/unison/dev-sync.prf` and `data-sync.prf`
+- **Logging**: Separate logs in `~/.unison/*.log`
+
+Dependencies: SSH key authentication (ed25519), Avahi mDNS for .local
+hostname resolution.
+
+Ignore patterns: .git, node_modules, __pycache__, .venv, build, dist,
+target, *.swp
+
+## Common Development Commands
+
+### Bootstrap and Testing
 
 ```bash
-# Fresh install deployment
+# Fresh install deployment (idempotent, safe to run multiple times)
+cd ~/dotfiles
 ./bootstrap.sh
 
-# Restore SSH keys from USB
+# Test bootstrap on VM (requires virt-manager)
+./scripts/setup/create-test-vm.sh
+./scripts/setup/setup-vm-testing.sh
+```
+
+### Dotfiles Management
+
+```bash
+# Push changes to git (via helper script)
+~/dotfiles/scripts/git/dotfiles-push.sh
+# Or use alias: dotfiles-push
+
+# Pull and re-deploy configs
+~/dotfiles/scripts/git/dotfiles-pull.sh
+./bootstrap.sh
+
+# After editing configs in ~/dotfiles/.config/, changes are live
+# (symlinks auto-update, no re-bootstrap needed)
+```
+
+### SSH and Sync Management
+
+```bash
+# Initial SSH setup (first time only on new machine)
+~/dotfiles/scripts/ssh/restore-ssh-from-dashlane.sh
+# OR from USB backup
 ~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh
 
-# First-time Unison sync (after SSH keys restored)
-~/dotfiles/scripts/sync/first-sync.sh
+# Verify SSH key setup
+ssh roger@newton.local
+
+# Sync commands (via aliases in .config/shell/alias)
+ssh-newton              # Connect to newton.local
+sync-now               # Manual one-time sync (both dev and data)
+sync-check             # Attach to tmux unison session
+sync-stop              # Kill tmux unison session
+sync-log               # Tail -f dev-sync.log
 ```
 
-### Development Workflow
+### Package Management
 
 ```bash
-# SSH and sync
-ssh-newton                  # Connect to newton.local server
-sync-now                    # Manual one-time sync
-tmux attach -t unison       # Monitor sync status
-sync-log                    # Watch sync log in real-time
+# Install new package and track it
+yay -S package-name
+echo "package-name" >> ~/dotfiles/packages.txt
 
-# Git operations in dotfiles repo
-cd ~/dotfiles
-git pull && ./bootstrap.sh  # Update dotfiles
+# Update all packages
+yay -Syu
+
+# Reinstall from packages.txt (bootstrap does this automatically)
+yay -S --needed $(grep -v '^#' packages.txt | grep -v '^$')
 ```
 
-### Testing Bootstrap Changes
-
-When iterating on bootstrap script or configs:
+### Web Application Management
 
 ```bash
-# Bootstrap is idempotent - safe to run multiple times
-./bootstrap.sh
+# Install all webapps from webapps.txt (bootstrap does this)
+~/dotfiles/scripts/setup/install-webapps.sh
 
-# For fresh install validation, use VM testing scripts
-~/dotfiles/scripts/setup/create-test-vm.sh
+# Add new webapp interactively
+~/dotfiles/scripts/webapp/install-webapp.sh
+
+# Remove webapp interactively
+~/dotfiles/scripts/webapp/remove-webapp.sh
+
+# Add webapp to dotfiles for bootstrap
+# 1. Add line to webapps/webapps.txt: NAME|URL|icon.svg
+# 2. Place icon in webapps/icons/ (optional)
+# 3. Commit to repo
 ```
 
-## Architecture Overview
+### Hyprland and Waybar
 
-### Hostname-Specific Configuration System
+```bash
+# Reload Hyprland config (or Super+Shift+E and re-login)
+hyprctl reload
 
-The system supports multiple machines (kelvin desktop, watt laptop) with
-host-specific configs that are automatically selected during bootstrap:
+# Test specific keybinding
+hyprctl dispatch exec kitty
 
-**Hyprland**: Bootstrap symlinks `hyprland-$HOSTNAME.conf` →
-`~/.config/hypr/hyprland.conf`
+# Restart waybar (if making changes)
+pkill waybar && waybar &
 
-- `hyprland-kelvin.conf`: Desktop (1.666667x scaling, US layout)
-- `hyprland-watt.conf`: Laptop (2.5x scaling for 4K, GB layout)
+# Check current Hyprland config being used
+ls -l ~/.config/hypr/hyprland.conf
+```
 
-**Waybar**: Bootstrap symlinks `config-$HOSTNAME` → `~/.config/waybar/config`
+## Bootstrap Script Workflow
 
-- `config-kelvin`: Desktop (no battery indicator)
-- `config-watt`: Laptop (includes battery module)
+Understanding `bootstrap.sh` execution (see comments in file):
 
-If hostname doesn't match kelvin/watt, bootstrap uses default configs and
-warns.
+1. **System validation**: Check Arch Linux, user 'roger', set SCRIPT_DIR
+2. **Install yay**: AUR helper (if not present)
+3. **System update**: `yay -Syu`
+4. **Package installation**: Parse `packages.txt`, install via yay
+5. **External tools**: Dashlane CLI, Claude Code, nvm, Node.js LTS
+6. **Directory creation**: `~/dev`, `~/data`, `~/downloads`,
+   `.local/share/wallpapers`
+7. **Symlink configs**: `.config/*`, `.zprofile`, `.zshenv` → dotfiles
+   repo
+8. **Install webapps**: Parse `webapps/webapps.txt`, install desktop
+   entries and icons
+9. **SDDM setup**: Tokyo Night theme with qt6-5compat for graphical
+   effects
+10. **mDNS configuration**: Auto-edit `/etc/nsswitch.conf` for .local
+   resolution
+11. **Enable services**: sshd, avahi-daemon, sddm
+12. **Shell setup**: Change default shell to zsh via chsh
 
-### Shell Configuration Architecture (XDG Compliant)
+**Idempotency**: Safe to run multiple times; checks before
+installing/symlinking.
 
-Multi-file modular shell setup following XDG Base Directory spec:
+**CRITICAL**: SCRIPT_DIR is set early (line 54) before any `cd` commands
+to ensure correct paths throughout execution.
 
-1. **`.zshenv`** (always sourced first): Sets XDG environment variables,
-   ensures clean home
-2. **`.zprofile`** (login shells): Adds `~/.local/bin` to PATH, sets up nvm,
-   cargo, go
-3. **`.config/zsh/.zshrc`** (interactive shells): Prompt, completions, syntax
-   highlighting, vi mode, auto-starts Unison sync in tmux
-4. **`.config/shell/alias`** (sourced by .zshrc): Common aliases (ssh-newton,
-   sync-*, etc.)
+## Repository Structure
 
-This keeps `~/` clean - only `.zshenv` and `.zprofile` in home, rest in
-`.config/`.
-
-### Unison Continuous Sync System
-
-Bidirectional sync to newton.local server runs automatically on login:
-
-**Architecture**:
-
-1. `.config/zsh/.zshrc` checks on interactive shell start
-2. If not in tmux session 'unison' → spawns detached tmux with dual panes
-3. Pane 0: `unison dev-sync` (continuous watch mode)
-4. Pane 1: `unison data-sync` (continuous watch mode)
-5. Logs: `~/.unison/dev-sync.log` and `~/.unison/data-sync.log`
-
-**Profiles**: `.config/unison/*.prf` (symlinked to `~/.unison/` by bootstrap)
-
-- `dev-sync.prf`: Syncs `~/dev` with auto=true, prefer=newer, repeat=watch
-- `data-sync.prf`: Syncs `~/data` with same settings
-
-**First-time sync**: Must run `first-sync.sh` with `-ignorearchives` to
-handle fresh install without existing Unison state. This prompts for conflict
-resolution. After that, continuous sync runs automatically.
-
-### Bootstrap Script Execution Flow
-
-Critical ordering in `bootstrap.sh` (execution order matters):
-
-1. **Set SCRIPT_DIR early** (before any `cd` commands) - fixes path issues
-2. **Install essential utilities** (grep, sed, inetutils) - needed for parsing
-3. **Install yay** - required for all subsequent package installs
-4. **Install packages** from `packages.txt` (comments ignored)
-5. **Install external tools** (Claude Code, nvm, LazyVim)
-6. **Create directories** (`~/dev`, `~/data`, `~/downloads`)
-7. **Symlink configs** (hostname-specific logic for hypr/waybar)
-8. **Setup SDDM** theme with proper permissions (qt6-5compat required)
-9. **Enable services** (audio, network, sshd, avahi)
-10. **Configure mDNS** (edit `/etc/nsswitch.conf` for .local resolution)
-11. **Change shell** to zsh
-
-Bootstrap is idempotent - safe to run multiple times for testing iterations.
-
-## Keybindings Philosophy
-
-- Super key as primary modifier
-- Vim-style directional keys (h,j,k,l) for navigation
-- Master layout focus: J/K cycle windows, Return makes window master, I/O
-  adjust master count
-- Quick access: Super+Shift+Return (terminal), Super+D (launcher), Super+B
-  (browser)
-- Power menu: Super+P (uses scripts/power/powermenu.sh)
+```
+.
+├── .config/
+│   ├── hypr/               # Hyprland configuration
+│   │   ├── hyprland.conf           # Base config (reference)
+│   │   ├── hyprland-kelvin.conf    # Desktop-specific
+│   │   ├── hyprland-watt.conf      # Laptop-specific
+│   │   ├── hyprpaper.conf          # Wallpaper config
+│   │   └── keybindings-apps.conf   # App launch keybindings
+│   ├── zsh/
+│   │   └── .zshrc          # Interactive shell config
+│   ├── shell/
+│   │   └── alias           # Shell aliases (modular)
+│   ├── waybar/             # Status bar config
+│   │   ├── config-kelvin   # Desktop waybar
+│   │   ├── config-watt     # Laptop waybar
+│   │   └── style.css       # Tokyo Night styling
+│   ├── unison/             # Sync profiles
+│   │   ├── dev-sync.prf    # ~/dev sync config
+│   │   └── data-sync.prf   # ~/data sync config
+│   ├── kitty/              # Terminal configuration
+│   ├── wofi/               # App launcher styling
+│   ├── mako/               # Notification daemon config
+│   ├── swaylock/           # Lock screen config
+│   ├── swayidle/           # Idle management config
+│   └── tmux/               # Terminal multiplexer config
+├── scripts/
+│   ├── power/              # powermenu.sh (shutdown, reboot, suspend)
+│   ├── ssh/                # SSH setup and restore scripts
+│   ├── sync/               # Unison sync management scripts
+│   ├── screenshot/         # Screenshot utilities (grim + slurp)
+│   ├── git/                # Dotfiles git helpers
+│   ├── setup/              # Installation scripts (Dashlane, VM testing)
+│   ├── tui/                # TUI app launcher
+│   ├── webapp/             # Web app installation
+│   ├── volume-notify.sh    # Volume change notifications
+│   └── brightness-notify.sh # Brightness notifications
+├── sddm/                   # Tokyo Night SDDM theme
+├── wallpapers/             # Custom wallpapers
+├── webapps/                # Web application definitions
+│   ├── icons/              # Webapp icons (svg format)
+│   └── webapps.txt         # Webapp list (NAME|URL|ICON_FILE)
+├── docs/                   # Additional documentation
+├── .zprofile               # Login shell, XDG environment variables
+├── .zshenv                 # Zsh environment (sources .zprofile)
+├── packages.txt            # Package list (122 packages)
+├── bootstrap.sh            # Installation script
+├── README.md               # User-facing documentation
+└── CLAUDE.md               # This file
+```
 
 ## Technical Preferences
 
@@ -189,7 +304,21 @@ Bootstrap is idempotent - safe to run multiple times for testing iterations.
 - **Shell**: Bash for scripts (not zsh/fish for simplicity and portability)
 - **Configuration Format**: Native formats (no complex templating)
 - **Dependencies**: Minimize external dependencies where possible
+- **Documentation**: In-line comments in configs, README for user-facing
+  setup instructions
+- **Paths**: Use environment variables ($HOME, $XDG_CONFIG_HOME, etc.)
+  never hardcode paths
 - **Testing**: Use VM testing scripts before deploying major changes
+
+## Development Approach
+
+1. Start with minimal viable setup (Hyprland + terminal + basic
+   keybindings)
+2. Layer in features incrementally (status bar, launcher, lock screen)
+3. Refine aesthetics (colors, fonts, spacing)
+4. Create utility scripts as needs arise
+5. Document as you build
+6. Test on fresh Arch VM before committing major changes
 
 ## Color Scheme
 
@@ -210,25 +339,66 @@ visual consistency.
 - White: `#a9b1d6`
 - Bright variants available for accents
 
+Reference: Waybar, Kitty, Hyprland, SDDM all use this palette.
+
+## Keybindings Philosophy
+
+- Super key as primary modifier
+- Vim-style directional keys (h,j,k,l) for navigation where appropriate
+- Master layout keybindings: J/K cycle windows, Return swaps to master,
+  I/O add/remove master
+- Quick access to terminal (Super+Shift+Return), browser (Super+B),
+  launcher (Super+D)
+- Power menu accessible via keyboard (Super+P)
+
+Full keybindings documented in README.md.
+
 ## What Claude Code Should Help With
 
-### Configuration and Scripts
+### Configuration Files
 
-- Write well-commented bash scripts with proper error handling
-- Ensure no hardcoded paths (use `$HOME`, `$XDG_CONFIG_HOME`, `$SCRIPT_DIR`)
-- Maintain XDG Base Directory compliance for all new configurations
-- Test scripts for edge cases and verify config syntax
+- Write and refine Hyprland config with thoughtful keybindings
+- Create swaylock-effects config for beautiful lock screen
+- Set up waybar with useful, minimal modules
+- Configure terminal emulator for aesthetics and functionality
+- Maintain Tokyo Night theme consistency across all applications
 - When adding Waybar modules, use MDI icons for consistency
+
+### Scripts
+
+- Write clean, well-commented bash scripts
+- Ensure proper error handling and user feedback
+- Make scripts modular and reusable
+- Follow shell best practices (shellcheck compliance)
+- Use appropriate exit codes
+- Ensure no hardcoded paths (use `$HOME`, `$XDG_CONFIG_HOME`, `$SCRIPT_DIR`)
+
+### Documentation
+
+- Keep README.md updated with user-facing setup instructions
+- Add comments to complex configurations
+- Document new features and keybindings
+- Create troubleshooting notes when issues arise
+
+### Testing and Validation
+
+- Verify syntax of all config files before committing
+- Test scripts for edge cases
+- Ensure no hardcoded paths (use $HOME, $XDG_CONFIG_HOME, etc.)
+- Validate package dependencies are in packages.txt
+- Maintain XDG Base Directory compliance for all new configurations
+- Test bootstrap.sh changes on fresh Arch VM
 
 ## Known Context About Roger
 
 - Chemical engineer with strong technical background
-- Runs Linux (Omarchy) with headless server for local LLMs
+- Runs Linux with headless server (newton.local) for local LLMs
 - Comfortable with terminal and scripting
 - Values local control over cloud services
 - Has experience with Python, C++, and system administration
 - Interested in optimization and clean, efficient solutions
-- Previous experience with project completion tracking systems
+- Two machines: kelvin (desktop), watt (laptop)
+- Uses Unison for real-time sync between machines and newton server
 
 ## Notes for Claude Code
 
@@ -252,8 +422,56 @@ compatibility:
 
 - Waybar modules use MDI codepoints (e.g., `󰻠` CPU, `󰍛` RAM, `󰋊` Disk)
 - Font Awesome included as fallback
-- If icons don't render: ensure `ttf-font-awesome` and `ttf-material-design-icons-desktop-git` are installed
+- If icons don't render: ensure `ttf-font-awesome` and
+  `ttf-material-design-icons-desktop-git` are installed
 
 When adding new Waybar modules or UI elements, prefer MDI icons over Font
 Awesome for consistency.
-- /quit
+
+## Current System Status
+
+### Working Features
+
+- Complete Hyprland configuration with master layout
+- Tokyo Night theme across all components
+- LazyVim for Neovim
+- Continuous sync to newton.local server via Unison (both dev and data
+  folders)
+- Avahi/mDNS for .local hostname resolution
+- Zsh shell with syntax highlighting, case-insensitive auto-completion,
+  and vi mode
+- XDG Base Directory compliance for clean home directory
+- Modular shell configuration (.zprofile, .config/zsh/, .config/shell/)
+- All essential utilities and scripts
+- Hostname-specific configurations for kelvin (desktop) and watt (laptop)
+- 4K display support with proper scaling on watt (2.5x)
+- GB keyboard layout on watt
+- Automatic screen lock via swayidle (5 min idle, 10 min screen off)
+- SDDM Tokyo Night login screen with qt6-5compat for effects
+- Waybar with Material Design Icons (CPU, RAM, Disk, Network, Audio,
+  Battery)
+
+### Machines
+
+- **kelvin** (desktop): 1.666667x scaling, no battery indicator
+- **watt** (laptop): 2.5x scaling, 4K display, battery indicator, GB
+  keyboard
+- **newton** (server): Ubuntu 22.04 LTS, sync target
+
+### Known Dependencies
+
+Critical for bootstrap success:
+
+- **qt6-5compat**: Required for SDDM Tokyo Night theme graphical effects
+- **avahi + nss-mdns**: Required for .local hostname resolution
+- **grep/sed**: Installed early as essential utilities (bootstrap.sh:59)
+- **SSH key**: Must be restored before Unison can start syncing
+
+## Success Criteria
+
+- Can clone dotfiles repo on fresh Arch install
+- Run bootstrap script to deploy configs
+- Have fully functional Hyprland desktop in < 1 hour
+- All essential workflows accessible via terminal
+- Beautiful, cohesive aesthetics throughout
+- Zero GUI applications except browser and PDF viewer

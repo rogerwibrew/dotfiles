@@ -1,0 +1,12 @@
+# Web Application Definitions
+# Format: NAME|URL|ICON_FILENAME
+# Leave ICON_FILENAME empty to use default chromium icon
+# Icons should be placed in webapps/icons/ directory
+#
+# These webapps will be automatically installed during bootstrap
+# Each creates a standalone Chromium window with its own desktop entry
+
+Claude|https://claude.ai|claude.svg
+Gmail|https://mail.google.com/mail/u/0/#inbox|gmail.svg
+Keep|https://keep.google.com/#home|keep.svg
+Chat GTP|https://chatgpt.com|chat-gtp.svg
