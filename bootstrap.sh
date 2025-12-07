@@ -57,7 +57,7 @@ info "Bootstrap script location: $SCRIPT_DIR"
 
 # Install essential utilities needed by this script
 info "Installing essential utilities..."
-sudo pacman -Sy --needed --noconfirm inetutils coreutils grep sed
+sudo pacman -S --needed --noconfirm inetutils coreutils grep sed
 success "Essential utilities installed"
 
 # Get hostname to determine which config to use
@@ -118,7 +118,7 @@ PACKAGES=$(grep -v '^#' "$SCRIPT_DIR/packages.txt" | grep -v '^$' |
   sed 's/#.*//' | tr '\n' ' ')
 
 if [ -n "$PACKAGES" ]; then
-  yay -S --needed --noconfirm $PACKAGES
+  yay -S --needed --noconfirm "$PACKAGES"
   success "All packages installed"
 else
   warning "No packages found in packages.txt"
@@ -126,7 +126,7 @@ fi
 
 # Install AUR packages (commented in packages.txt)
 info "Installing AUR packages..."
-yay -S --needed --noconfirm hyprpicker wlogout 2>/dev/null ||
+yay -S --needed --noconfirm hyprpicker wlogout simple-scan 2>/dev/null ||
   warning "Some AUR packages may have failed"
 
 # Install Claude Code (native installation via official script)

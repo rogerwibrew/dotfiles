@@ -36,7 +36,7 @@ Goals:
 - **Terminal**: Kitty with ligature support
 - **Browser**: Chromium
 - **PDF Viewer**: Zathura
-- **Scanner**: simple-scan (linuxmint GTK3 version)
+- **Scanner**: simple-scan
 - **File Manager**: yazi (terminal-based)
 
 ### Wayland Ecosystem Tools
@@ -489,7 +489,7 @@ and watt to ensure reproducible deployment from fresh Arch install.
 4. **Fix watt issues** - Address any problems discovered during testing
 5. **Test scanner app on watt** - Verify AUR scanner packages work correctly
    before kelvin deployment
-   - Install: `yay -S --needed simple-scan-linuxmint sane sane-airscan`
+   - Install: `yay -S --needed simple-scan sane sane-airscan`
    - Launch scanner app and verify it detects connected scanner
    - Test basic scan functionality
 6. **Verify watt-specific features**:
