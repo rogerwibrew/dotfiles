@@ -1,6 +1,18 @@
 # Dotfiles - My Hyprland Non-Rice
 
-My goal with this project is to hae a 
+I was using Omarchy linux. I loved it, but loved it too much. I spent far too much time messing with my setup. I decided to go back to basics and build a set up that is easily syncable across my devices. I also wanted to be able to set up my computer quickly after an Arch fresh install.
+
+This is the result. My goals:
+
+1. Attractive, but not easy to change. I did not want to be able to change themes with a few keystrokes, but it did need to look good enough by default. I chose tokyo night colours.
+2. I want a terminal based set up. I only want GUI applications where there is no sense in using the terminal.
+3. automatically sync files across all my machines including my server.
+
+**Please note** this is highly customised to my build. If you happen across this, please do not simply clone and install. It references the names I use for my computers (Watt for my laptop, Kelvin for my desktop and Newton for my server.) If you do want to use it, then I suggest using the code as a base for your setup.
+
+**Use of AI** This, by its nature, relies on scripts. I am useless at writing these so I leaned heavily on AI (specifically Claude Code) to write. I went through many, many iterations to get it working on my machines without issues. I do not vouch for the quality of the code, but I know it worked for me. I suspect that it is quite fragile and careless changes will break it easily.
+
+**SSH** I have a step to add ssh keys as that is how I communicate between my computers and my server and to other services like github.
 
 ## Quick Start
 
@@ -17,7 +29,7 @@ The bootstrap script will:
 - Install all packages via yay
 - Set up zsh as default shell
 - Symlink all configurations
-- Install NvChad for Neovim
+- Install LazyVim for Neovim
 - Install nvm for Node.js
 
 After bootstrap completes:
@@ -40,7 +52,7 @@ The bootstrap script will verify these requirements before proceeding.
 - **Theme**: Tokyo Night color scheme throughout
 - **Shell**: zsh with syntax highlighting, auto-completion, and vi mode
 - **Terminal**: Kitty with ligature support
-- **Editor**: Neovim with NvChad
+- **Editor**: Neovim with LazyVim
 - **File Manager**: yazi (terminal-based)
 - **Launcher**: wofi
 - **Status Bar**: waybar
@@ -56,19 +68,20 @@ The bootstrap script will verify these requirements before proceeding.
 
 ### Desktop (kelvin)
 
-- Monitor scaling: 1.0x (no scaling)
+- Monitor scaling: 1.666667x
 - No battery indicator in waybar
 - Config: `.config/hypr/hyprland-kelvin.conf`
 
 ### Laptop (watt)
 
-- Monitor scaling: 1.5x (HiDPI)
+- Monitor scaling: 2.0x (HiDPI)
 - Battery indicator in waybar
 - Config: `.config/hypr/hyprland-watt.conf`
 
 ## Keybindings
 
 ### Applications
+
 - `Super + Shift + Return` - Terminal (Kitty)
 - `Super + D` - Application launcher (wofi)
 - `Super + W` - Close window
@@ -76,6 +89,9 @@ The bootstrap script will verify these requirements before proceeding.
 - `Super + L` - Lock screen
 
 ### Master Layout
+
+**I used to use dwm and like their standard keybindings**
+
 - `Super + J` - Cycle to next window
 - `Super + K` - Cycle to previous window
 - `Super + Return` - Make current window master
@@ -85,12 +101,14 @@ The bootstrap script will verify these requirements before proceeding.
 - `Super + V` - Toggle floating
 
 ### Workspaces
+
 - `Super + H` - Previous workspace
 - `Super + L` - Next workspace
 - `Super + 1-9` - Switch to workspace 1-9
 - `Super + Shift + 1-9` - Move window to workspace 1-9
 
 ### Media Keys
+
 - `XF86AudioRaiseVolume` - Volume up
 - `XF86AudioLowerVolume` - Volume down
 - `XF86AudioMute` - Toggle mute
@@ -109,8 +127,8 @@ The bootstrap script will verify these requirements before proceeding.
 
 ## SSH and Sync to Newton Server
 
-This setup uses Unison for bidirectional real-time sync of the dev folder
-with newton.local server.
+This setup uses Unison for bidirectional real-time sync of the dev and
+data folders with newton.local server.
 
 ### Initial Setup
 
@@ -127,8 +145,8 @@ The SSH key is backed up to USB and restored on each new machine setup.
 ### Sync Workflow
 
 On login, zsh automatically starts a tmux session named "unison" that runs
-continuous file watching. Any changes in `~/dev` are immediately synced to
-`newton.local`.
+continuous file watching. Any changes in `~/dev` or `~/data` are
+immediately synced to `newton.local`.
 
 ### Useful Commands
 
@@ -142,9 +160,11 @@ sync-log         # Watch sync log in real-time
 
 ### Sync Configuration
 
-- Profile: `~/.unison/dev-sync.prf`
-- Log: `~/.unison/dev-sync.log`
-- Syncs: `~/dev` ↔ `roger@newton.local:/home/roger/dev`
+- Profiles: `~/.unison/dev-sync.prf` and `~/.unison/data-sync.prf`
+- Logs: `~/.unison/dev-sync.log` and `~/.unison/data-sync.log`
+- Syncs:
+  - `~/dev` ↔ `roger@newton.local:/home/roger/dev`
+  - `~/data` ↔ `roger@newton.local:/home/roger/data`
 - Mode: Continuous with `repeat = watch`
 
 ## Wallpaper
@@ -179,6 +199,7 @@ Hyprland config.
 To add a new webapp to the dotfiles:
 
 1. Add entry to `webapps/webapps.txt`:
+
    ```
    App Name|https://example.com|icon-filename.svg
    ```
@@ -203,9 +224,11 @@ Icons can be downloaded from [dashboardicons.com](https://dashboardicons.com/).
 ## Post-Install Steps
 
 1. Restore SSH key from USB: `~/dotfiles/scripts/ssh/restore-ssh-from-usb.sh`
-2. Add wallpaper to `~/.local/share/wallpapers/wallpaper.jpg`
-3. Open Neovim and run `:MasonInstallAll` for LSP support
-4. Install Node.js: `nvm install --lts`
+2. Run first-time Unison sync: `~/dotfiles/scripts/sync/first-sync.sh`
+3. Reboot your system
+4. Log in at SDDM (Tokyo Night theme)
+5. Unison will auto-sync dev and data folders in background
+6. Open Neovim - LazyVim will auto-install plugins (run `:LazyHealth` to verify)
 
 ## Home Directory Structure
 
