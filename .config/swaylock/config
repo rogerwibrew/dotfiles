@@ -2,7 +2,7 @@
 # Tokyo Night Theme
 
 # Disable daemonize to show lock screen immediately
-daemonize
+# daemonize  # Removed: prevents screen wake after DPMS off
 
 # Ignore empty password
 ignore-empty-password
