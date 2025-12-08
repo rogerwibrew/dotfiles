@@ -1,7 +1,6 @@
-# Dotfiles - Hyprland Rice
+# Dotfiles - My Hyprland Non-Rice
 
-Beautiful Tokyo Night themed Hyprland setup for Arch Linux with
-terminal-first workflow and continuous sync to newton server.
+My goal with this project is to hae a 
 
 ## Quick Start
 
