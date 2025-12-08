@@ -63,6 +63,7 @@ swayidle
 
 # Notifications
 mako
+libnotify        # Provides notify-send command
 
 # Screenshots
 grim
