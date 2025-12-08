@@ -92,6 +92,7 @@ zathura-pdf-mupdf
 chromium
 
 # Scanner
+simple-scan       # GNOME scanner application
 sane              # Scanner backend library
 sane-airscan      # Modern driverless scanner support
 
@@ -127,7 +128,6 @@ nwg-look
 # AUR Packages (install with yay)
 # hyprpicker (color picker for Wayland)
 # wlogout (logout menu)
-# simple-scan (GNOME scanner app)
 
 # Notes:
 # - All packages should be installed via yay (handles both official and AUR)
