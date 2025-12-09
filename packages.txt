@@ -97,6 +97,11 @@ simple-scan       # GNOME scanner application
 sane              # Scanner backend library
 sane-airscan      # Modern driverless scanner support
 
+# Printing
+cups              # OpenPrinting CUPS printing system
+gutenprint        # High-quality generic printer drivers
+system-config-printer  # CUPS printer configuration GUI
+
 # Audio
 pipewire
 pipewire-pulse
@@ -129,6 +134,7 @@ nwg-look
 # AUR Packages (install with yay)
 # hyprpicker (color picker for Wayland)
 # wlogout (logout menu)
+# epson-inkjet-printer-escpr2 (Epson ET-2865 EcoTank driver)
 
 # Notes:
 # - All packages should be installed via yay (handles both official and AUR)

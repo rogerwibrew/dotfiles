@@ -136,7 +136,7 @@ fi
 
 # Install AUR packages (commented in packages.txt)
 info "Installing AUR packages..."
-yay -S --needed --noconfirm hyprpicker wlogout 2>/dev/null ||
+yay -S --needed --noconfirm hyprpicker wlogout epson-inkjet-printer-escpr2 2>/dev/null ||
   warning "Some AUR packages may have failed"
 
 # Install Claude Code (native installation via official script)
@@ -375,6 +375,10 @@ sudo systemctl enable --now avahi-daemon.service
 sudo systemctl enable --now sshd.service
 success "Network services enabled (iwd, avahi, sshd)"
 info "SSH is now available - connect via: ssh roger@$(hostname).local"
+
+info "Enabling printing service..."
+sudo systemctl enable --now cups.service
+success "CUPS printing service enabled"
 
 # Configure nss-mdns for .local hostname resolution
 info "Configuring mDNS hostname resolution..."
