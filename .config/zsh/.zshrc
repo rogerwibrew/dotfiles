@@ -63,6 +63,9 @@ y() {
   fi
 }
 
+# Initialize zoxide for smart directory jumping
+eval "$(zoxide init zsh)"
+
 # Prompt - simple and clean with hostname and git info
 setopt PROMPT_SUBST
 PROMPT='%F{cyan}%m%f %F{blue}%~%f$(git_prompt_info) %F{cyan}❯%f '

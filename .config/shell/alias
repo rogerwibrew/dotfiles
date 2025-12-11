@@ -8,6 +8,9 @@ alias ll='eza -l'
 alias la='eza -la'
 alias lt='eza --tree'
 
+# Zoxide - smart directory jumping (use 'builtin cd' for traditional cd)
+alias cd='z'
+
 # SSH and Sync shortcuts
 alias ssh-newton='~/dotfiles/scripts/ssh/connect-newton.sh'
 alias sync-now='~/dotfiles/scripts/sync/sync-now.sh'
