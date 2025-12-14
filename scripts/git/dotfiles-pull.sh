@@ -2,7 +2,7 @@
 # Pull dotfiles changes from GitHub
 # Usage: dotfiles-pull.sh
 
-DOTFILES_DIR="$HOME/dev/dotfiles"
+DOTFILES_DIR="$HOME/dotfiles"
 
 # Change to dotfiles directory
 cd "$DOTFILES_DIR" || {

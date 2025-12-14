@@ -2,7 +2,7 @@
 # Push dotfiles changes to GitHub
 # Usage: dotfiles-push.sh [commit message]
 
-DOTFILES_DIR="$HOME/dev/dotfiles"
+DOTFILES_DIR="$HOME/dotfiles"
 
 # Change to dotfiles directory
 cd "$DOTFILES_DIR" || {
