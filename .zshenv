@@ -9,5 +9,11 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 # NVM directory
 export NVM_DIR="$XDG_DATA_HOME/nvm"
 
+# Default programs (available to all shells)
+export EDITOR="nvim"
+export VISUAL="nvim"
+export TERMINAL="kitty"
+export BROWSER="chromium"
+
 # Point zsh to XDG-compliant config directory
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
