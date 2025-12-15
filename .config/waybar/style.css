@@ -59,7 +59,7 @@ window#waybar.hidden {
 #clock {
     padding: 0 16px;
     margin: 0 4px;
-    background-color: #24283b;
+    background-color: #1a1b26;
     color: #7aa2f7;
     border-radius: 4px;
     font-weight: bold;
@@ -76,7 +76,7 @@ window#waybar.hidden {
 #tray {
     padding: 0 10px;
     margin: 2px 2px;
-    background-color: #24283b;
+    background-color: #1a1b26;
     border-radius: 4px;
 }
 
