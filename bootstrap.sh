@@ -313,6 +313,9 @@ create_symlink "$SCRIPT_DIR/.zprofile" "$HOME/.zprofile"
 create_symlink "$SCRIPT_DIR/.config/zsh" "$HOME/.config/zsh"
 create_symlink "$SCRIPT_DIR/.config/shell" "$HOME/.config/shell"
 
+# Symlink XDG user directories
+create_symlink "$SCRIPT_DIR/.config/user-dirs.dirs" "$HOME/.config/user-dirs.dirs"
+
 # Create XDG cache directory for zsh history
 mkdir -p "$HOME/.cache"
 
@@ -375,6 +378,10 @@ sudo systemctl enable --now avahi-daemon.service
 sudo systemctl enable --now sshd.service
 success "Network services enabled (iwd, avahi, sshd)"
 info "SSH is now available - connect via: ssh roger@$(hostname).local"
+
+info "Enabling bluetooth service..."
+sudo systemctl enable --now bluetooth.service
+success "Bluetooth service enabled"
 
 info "Enabling printing service..."
 sudo systemctl enable --now cups.service

@@ -67,8 +67,8 @@
 
     "disk": {
         "interval": 30,
-        "format": "󰋊 {percentage_free}%",
-        "path": "/",
+        "format": "󰋊 {percentage_used}%",
+        "path": "/home",
         "tooltip-format": "{free} free of {total} ({percentage_used}% used)"
     },
 

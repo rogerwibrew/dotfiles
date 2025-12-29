@@ -18,6 +18,9 @@ iwd         # iNet wireless daemon (backend)
 impala      # TUI for managing WiFi
 avahi       # mDNS/DNS-SD for .local hostname resolution
 nss-mdns    # NSS module for mDNS hostname resolution
+bluez       # Bluetooth protocol stack
+bluez-utils # Bluetooth utilities (bluetoothctl)
+blueman     # GTK+ Bluetooth manager GUI
 
 # Development Tools
 base-devel  # Includes gcc, g++, make, and other build tools
