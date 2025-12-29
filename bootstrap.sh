@@ -211,28 +211,46 @@ fi
 
 # Setup LazyVim for Neovim
 info "Setting up LazyVim..."
-# Remove existing Neovim files
-if [ -d "$HOME/.config/nvim" ]; then
-  warning "Removing existing Neovim config..."
-  rm -rf "$HOME/.config/nvim" 2>/dev/null || true
-fi
-if [ -d "$HOME/.local/share/nvim" ]; then
-  rm -rf "$HOME/.local/share/nvim" 2>/dev/null || true
-fi
-if [ -d "$HOME/.local/state/nvim" ]; then
-  rm -rf "$HOME/.local/state/nvim" 2>/dev/null || true
-fi
-if [ -d "$HOME/.cache/nvim" ]; then
-  rm -rf "$HOME/.cache/nvim" 2>/dev/null || true
-fi
 
-# Clone LazyVim starter
-if git clone https://github.com/LazyVim/starter "$HOME/.config/nvim" 2>/dev/null; then
-  # Remove .git folder as recommended by LazyVim docs
-  rm -rf "$HOME/.config/nvim/.git" 2>/dev/null || true
-  success "LazyVim installed"
+# Check if existing Neovim config exists
+if [ -d "$HOME/.config/nvim" ]; then
+  warning "Existing Neovim config detected at ~/.config/nvim"
+  echo -n "Do you want to remove it and install LazyVim? (y/N): "
+  read -r response
+  if [[ "$response" =~ ^[Yy]$ ]]; then
+    # Remove existing Neovim files
+    warning "Removing existing Neovim config..."
+    rm -rf "$HOME/.config/nvim" 2>/dev/null || true
+    if [ -d "$HOME/.local/share/nvim" ]; then
+      rm -rf "$HOME/.local/share/nvim" 2>/dev/null || true
+    fi
+    if [ -d "$HOME/.local/state/nvim" ]; then
+      rm -rf "$HOME/.local/state/nvim" 2>/dev/null || true
+    fi
+    if [ -d "$HOME/.cache/nvim" ]; then
+      rm -rf "$HOME/.cache/nvim" 2>/dev/null || true
+    fi
+
+    # Clone LazyVim starter
+    if git clone https://github.com/LazyVim/starter "$HOME/.config/nvim" 2>/dev/null; then
+      # Remove .git folder as recommended by LazyVim docs
+      rm -rf "$HOME/.config/nvim/.git" 2>/dev/null || true
+      success "LazyVim installed"
+    else
+      warning "LazyVim installation failed (network issue)"
+    fi
+  else
+    info "Skipping LazyVim installation - keeping existing Neovim config"
+  fi
 else
-  warning "LazyVim installation failed (network issue or already exists)"
+  # No existing config, install LazyVim
+  if git clone https://github.com/LazyVim/starter "$HOME/.config/nvim" 2>/dev/null; then
+    # Remove .git folder as recommended by LazyVim docs
+    rm -rf "$HOME/.config/nvim/.git" 2>/dev/null || true
+    success "LazyVim installed"
+  else
+    warning "LazyVim installation failed (network issue)"
+  fi
 fi
 
 # Create necessary directories
