@@ -271,7 +271,7 @@ create_symlink "$SCRIPT_DIR/.config/yazi" "$HOME/.config/yazi"
 create_symlink "$SCRIPT_DIR/.config/swaylock" "$HOME/.config/swaylock"
 create_symlink "$SCRIPT_DIR/.config/swayidle" "$HOME/.config/swayidle"
 create_symlink "$SCRIPT_DIR/.config/tmux" "$HOME/.config/tmux"
-create_symlink "$SCRIPT_DIR/.config/unison" "$HOME/.unison"
+create_symlink "$SCRIPT_DIR/.config/unison" "$HOME/.config/unison"
 
 # Create waybar directory and symlink style.css
 mkdir -p "$HOME/.config/waybar"

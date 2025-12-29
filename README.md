@@ -293,6 +293,7 @@ dotfiles/
 │   ├── power/                       # Power menu
 │   ├── ssh/                         # SSH setup scripts
 │   ├── sync/                        # Sync management
+│   ├── system/                      # System maintenance (safe-update.sh)
 │   ├── screenshot/                  # Screenshot utilities
 │   ├── volume-notify.sh             # Volume notifications
 │   └── brightness-notify.sh         # Brightness notifications
@@ -315,6 +316,48 @@ git pull
 ```
 
 The script will backup existing configs before symlinking.
+
+## System Maintenance
+
+### Safe System Updates
+
+Use the `safe-update` script to update your system with comprehensive
+error checking and validation:
+
+```bash
+safe-update        # Full update with all checks
+check-updates      # Dry run, see what would be updated
+quick-update       # Skip slower validation steps
+```
+
+The safe-update script performs:
+
+**Pre-update checks:**
+- Disk space verification (minimum 2GB required)
+- Pacman database integrity check
+- Broken package detection
+- Failed service detection
+- Arch Linux news review
+- Package list backup to `~/.cache/system-updates/`
+
+**Update process:**
+- Runs `yay -Syu` with error detection
+- Captures all output to log file
+- Stops immediately on any errors
+
+**Post-update validation:**
+- Checks for `.pacnew` configuration files
+- Identifies orphaned packages (with removal option)
+- Verifies kernel updates (recommends reboot if needed)
+- Validates critical services (sddm, pipewire, avahi-daemon)
+
+**Logs and backups:**
+- Update logs: `~/.cache/system-updates/update-YYYYMMDD-HHMMSS.log`
+- Package backups:
+  `~/.cache/system-updates/packages-YYYYMMDD-HHMMSS.txt`
+
+This prevents silent update failures and catches common issues before
+they break your system.
 
 ## Color Scheme
 

@@ -21,3 +21,8 @@ alias sync-log='tail -f ~/.unison/dev-sync.log'
 # Dotfiles git shortcuts
 alias dotfiles-push='~/dotfiles/scripts/git/dotfiles-push.sh'
 alias dotfiles-pull='~/dotfiles/scripts/git/dotfiles-pull.sh'
+
+# System maintenance
+alias safe-update='~/dotfiles/scripts/system/safe-update.sh'
+alias check-updates='~/dotfiles/scripts/system/safe-update.sh --check'
+alias quick-update='~/dotfiles/scripts/system/safe-update.sh --quick'

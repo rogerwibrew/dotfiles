@@ -177,12 +177,26 @@ sync-log               # Tail -f dev-sync.log
 yay -S package-name
 echo "package-name" >> ~/dotfiles/packages.txt
 
-# Update all packages
+# Update all packages (RECOMMENDED - with error checking)
+safe-update          # Full update with all safety checks
+check-updates        # Dry run to see what would be updated
+quick-update         # Skip slower validation steps
+
+# Direct update (not recommended, use safe-update instead)
 yay -Syu
 
 # Reinstall from packages.txt (bootstrap does this automatically)
 yay -S --needed $(grep -v '^#' packages.txt | grep -v '^$')
 ```
+
+**IMPORTANT**: Always use `safe-update` instead of `yay -Syu` directly.
+The safe-update script prevents silent failures by:
+- Checking disk space and database integrity before updating
+- Logging all output to `~/.cache/system-updates/`
+- Backing up package lists before changes
+- Validating system state after updates
+- Detecting kernel updates that require reboot
+- Checking for .pacnew files and orphaned packages
 
 ### Web Application Management
 
@@ -278,6 +292,7 @@ to ensure correct paths throughout execution.
 │   ├── power/              # powermenu.sh (shutdown, reboot, suspend)
 │   ├── ssh/                # SSH setup and restore scripts
 │   ├── sync/               # Unison sync management scripts
+│   ├── system/             # System maintenance (safe-update.sh)
 │   ├── screenshot/         # Screenshot utilities (grim + slurp)
 │   ├── git/                # Dotfiles git helpers
 │   ├── setup/              # Installation scripts (Dashlane, VM testing)
