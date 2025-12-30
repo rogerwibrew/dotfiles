@@ -36,8 +36,6 @@ Thumbs.db
 # Unison sync archives and state
 .config/unison/ar*
 .config/unison/fp*
-.config/unison/default.prf
-.config/unison/*.log
 
 # Zsh completion cache
 .config/zsh/.zcompdump
@@ -55,4 +53,9 @@ Thumbs.db
 !.config/*/*.prf
 !.config/*/*.sh
 !.config/*/*.toml
+!.config/*/*.dirs
 scripts/scripts
+
+# Unison auto-generated files (must come after negation patterns)
+.config/unison/default.prf
+.config/unison/*.log
