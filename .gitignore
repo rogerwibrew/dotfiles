@@ -36,6 +36,8 @@ Thumbs.db
 # Unison sync archives and state
 .config/unison/ar*
 .config/unison/fp*
+.config/unison/default.prf
+.config/unison/*.log
 
 # Zsh completion cache
 .config/zsh/.zcompdump
