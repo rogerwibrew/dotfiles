@@ -212,14 +212,30 @@ fi
 # Setup LazyVim for Neovim
 info "Setting up LazyVim..."
 
-# Check if existing Neovim config exists
-if [ -d "$HOME/.config/nvim" ]; then
-  warning "Existing Neovim config detected at ~/.config/nvim"
-  echo -n "Do you want to remove it and install LazyVim? (y/N): "
+# Check if nvim config exists in dotfiles directory
+if [ ! -d "$SCRIPT_DIR/.config/nvim" ]; then
+  info "No Neovim config found in dotfiles, installing LazyVim..."
+
+  # Clone LazyVim starter to dotfiles directory
+  if git clone https://github.com/LazyVim/starter "$SCRIPT_DIR/.config/nvim" 2>/dev/null; then
+    # Remove .git folder as recommended by LazyVim docs
+    rm -rf "$SCRIPT_DIR/.config/nvim/.git" 2>/dev/null || true
+    success "LazyVim cloned to dotfiles"
+  else
+    warning "LazyVim installation failed (network issue)"
+  fi
+else
+  success "Neovim config already exists in dotfiles"
+fi
+
+# Clean up existing Neovim data/cache if requested
+if [ -d "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
+  warning "Existing Neovim config detected at ~/.config/nvim (not a symlink)"
+  echo -n "Remove it and use dotfiles version? (y/N): "
   read -r response
   if [[ "$response" =~ ^[Yy]$ ]]; then
     # Remove existing Neovim files
-    warning "Removing existing Neovim config..."
+    warning "Removing existing Neovim config and data..."
     rm -rf "$HOME/.config/nvim" 2>/dev/null || true
     if [ -d "$HOME/.local/share/nvim" ]; then
       rm -rf "$HOME/.local/share/nvim" 2>/dev/null || true
@@ -230,26 +246,9 @@ if [ -d "$HOME/.config/nvim" ]; then
     if [ -d "$HOME/.cache/nvim" ]; then
       rm -rf "$HOME/.cache/nvim" 2>/dev/null || true
     fi
-
-    # Clone LazyVim starter
-    if git clone https://github.com/LazyVim/starter "$HOME/.config/nvim" 2>/dev/null; then
-      # Remove .git folder as recommended by LazyVim docs
-      rm -rf "$HOME/.config/nvim/.git" 2>/dev/null || true
-      success "LazyVim installed"
-    else
-      warning "LazyVim installation failed (network issue)"
-    fi
+    success "Cleaned up existing Neovim files"
   else
-    info "Skipping LazyVim installation - keeping existing Neovim config"
-  fi
-else
-  # No existing config, install LazyVim
-  if git clone https://github.com/LazyVim/starter "$HOME/.config/nvim" 2>/dev/null; then
-    # Remove .git folder as recommended by LazyVim docs
-    rm -rf "$HOME/.config/nvim/.git" 2>/dev/null || true
-    success "LazyVim installed"
-  else
-    warning "LazyVim installation failed (network issue)"
+    info "Skipping cleanup - will preserve existing config"
   fi
 fi
 
@@ -290,6 +289,7 @@ create_symlink "$SCRIPT_DIR/.config/swaylock" "$HOME/.config/swaylock"
 create_symlink "$SCRIPT_DIR/.config/swayidle" "$HOME/.config/swayidle"
 create_symlink "$SCRIPT_DIR/.config/tmux" "$HOME/.config/tmux"
 create_symlink "$SCRIPT_DIR/.config/unison" "$HOME/.config/unison"
+create_symlink "$SCRIPT_DIR/.config/nvim" "$HOME/.config/nvim"
 
 # Create waybar directory and symlink style.css
 mkdir -p "$HOME/.config/waybar"

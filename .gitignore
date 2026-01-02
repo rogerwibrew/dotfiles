@@ -14,12 +14,11 @@
 Thumbs.db
 
 # Application runtime and cache files
-.config/nvim/
 .config/*/cache/
 .config/*/Cache/
 .config/*/logs/
 
-# Neovim plugin data (NvChad manages this)
+# Neovim plugin data (managed separately, not in dotfiles)
 .local/share/nvim/
 
 # Application state files (not configs)
@@ -47,7 +46,21 @@ Thumbs.db
 .config/yazi/*.log
 
 # Prevent circular symlinks (directories linking to themselves)
-.config/*/*
+# Ignore all subdirectories in .config except nvim
+.config/hypr/*
+.config/kitty/*
+.config/mako/*
+.config/shell/*
+.config/swayidle/*
+.config/swaylock/*
+.config/tmux/*
+.config/unison/*
+.config/waybar/*
+.config/wofi/*
+.config/yazi/*
+.config/zsh/*
+
+# Then allow specific file types back in
 !.config/*/*.conf
 !.config/*/*.css
 !.config/*/*.prf

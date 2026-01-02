@@ -1,0 +1,26 @@
+# LazyVim defaults (ignore these, they come with the starter template)
+init.lua
+README.md
+LICENSE
+stylua.toml
+.neoconf.json
+lua/config/lazy.lua
+lua/config/keymaps.lua
+lua/config/autocmds.lua
+lua/plugins/example.lua
+
+# LazyVim runtime files (generated, don't track)
+lazy-lock.json
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
+
+# EXCEPTIONS: Track these custom/important files
+!lua/config/options.lua
+!lua/plugins/colorscheme.lua
+!lazyvim.json
