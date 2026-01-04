@@ -95,6 +95,12 @@ zathura-pdf-mupdf
 # Browser
 chromium
 
+# Gaming
+steam                  # Valve's gaming platform
+vulkan-radeon          # AMD Vulkan driver (RADV)
+lib32-vulkan-radeon    # 32-bit AMD Vulkan driver for games
+lib32-mesa             # 32-bit Mesa libraries for compatibility
+
 # Scanner
 simple-scan       # GNOME scanner application
 sane              # Scanner backend library
@@ -102,6 +108,8 @@ sane-airscan      # Modern driverless scanner support
 
 # Printing
 cups              # OpenPrinting CUPS printing system
+cups-browsed      # Printer discovery daemon (required for browser printing)
+cups-pdf          # PDF printer backend (required for browser printing)
 gutenprint        # High-quality generic printer drivers
 system-config-printer  # CUPS printer configuration GUI
 
@@ -111,6 +119,8 @@ pipewire-pulse
 pipewire-alsa
 wireplumber
 pamixer
+pulsemixer
+pavucontrol
 
 # Brightness Control
 brightnessctl
