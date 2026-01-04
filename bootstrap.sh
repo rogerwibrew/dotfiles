@@ -291,6 +291,12 @@ create_symlink "$SCRIPT_DIR/.config/tmux" "$HOME/.config/tmux"
 create_symlink "$SCRIPT_DIR/.config/unison" "$HOME/.config/unison"
 create_symlink "$SCRIPT_DIR/.config/nvim" "$HOME/.config/nvim"
 
+# Unison expects profiles in ~/.unison/ (doesn't support XDG)
+# Create symlinks from ~/.unison/*.prf to ~/.config/unison/*.prf
+mkdir -p "$HOME/.unison"
+create_symlink "$HOME/.config/unison/dev-sync.prf" "$HOME/.unison/dev-sync.prf"
+create_symlink "$HOME/.config/unison/data-sync.prf" "$HOME/.unison/data-sync.prf"
+
 # Create waybar directory and symlink style.css
 mkdir -p "$HOME/.config/waybar"
 create_symlink "$SCRIPT_DIR/.config/waybar/style.css" \
