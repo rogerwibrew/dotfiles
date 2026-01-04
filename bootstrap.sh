@@ -222,9 +222,15 @@ fi
 # Setup LazyVim for Neovim
 info "Setting up LazyVim..."
 
-# Check if nvim config exists in dotfiles directory
-if [ ! -d "$SCRIPT_DIR/.config/nvim" ]; then
-  info "No Neovim config found in dotfiles, installing LazyVim..."
+# Check if nvim config exists and is complete (has init.lua)
+if [ ! -f "$SCRIPT_DIR/.config/nvim/init.lua" ]; then
+  # Directory might exist but be incomplete (e.g., only .gitignore from repo)
+  if [ -d "$SCRIPT_DIR/.config/nvim" ]; then
+    info "Incomplete Neovim config detected, reinstalling LazyVim..."
+    rm -rf "$SCRIPT_DIR/.config/nvim"
+  else
+    info "No Neovim config found in dotfiles, installing LazyVim..."
+  fi
 
   # Clone LazyVim starter to dotfiles directory
   if git clone https://github.com/LazyVim/starter "$SCRIPT_DIR/.config/nvim" 2>/dev/null; then
