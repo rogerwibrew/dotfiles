@@ -100,6 +100,16 @@ else
   success "yay already installed"
 fi
 
+# Enable multilib repository for 32-bit packages (Steam, gaming)
+info "Enabling multilib repository..."
+if ! grep -q "^\[multilib\]" /etc/pacman.conf; then
+  info "Multilib not enabled, enabling it now..."
+  sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//' /etc/pacman.conf
+  success "Multilib repository enabled"
+else
+  success "Multilib repository already enabled"
+fi
+
 # Update system
 info "Updating system..."
 yay -Syu --noconfirm || warning "System update had some issues, continuing..."
