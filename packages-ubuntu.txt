@@ -1,0 +1,272 @@
+# Ubuntu Package List for Sway Setup
+# This file lists packages to install via apt on Ubuntu 24.04 LTS
+# Lines starting with # are comments
+# Blank lines are ignored
+
+# ============================================================================
+# CORE WAYLAND/SWAY PACKAGES
+# ============================================================================
+
+# Sway Window Manager (i3-compatible Wayland compositor)
+sway
+swaybg                   # Wallpaper manager for Sway
+swayidle                 # Idle management daemon
+swaylock                 # Screen locker for Sway
+
+# XDG Desktop Portal for Wayland
+xdg-desktop-portal-wlr   # Wayland-roots portal (for sway)
+xdg-desktop-portal-gtk   # GTK portal backend
+
+# Qt Wayland Support
+qt5-wayland
+qt6-wayland
+
+# ============================================================================
+# TERMINAL & EDITOR
+# ============================================================================
+
+kitty                    # GPU-accelerated terminal emulator
+# Note: Neovim 0.10+ requires PPA - see bootstrap script
+
+# ============================================================================
+# NETWORK MANAGEMENT
+# ============================================================================
+
+# Ubuntu uses NetworkManager by default (already installed)
+network-manager          # Network management daemon (may already be installed)
+# Note: nmtui and nmcli come with network-manager package
+
+# Avahi for mDNS (.local hostname resolution)
+avahi-daemon             # mDNS/DNS-SD daemon
+libnss-mdns              # NSS module for mDNS hostname resolution
+
+# Bluetooth
+bluez                    # Bluetooth protocol stack
+bluez-tools              # Bluetooth utilities
+blueman                  # GTK+ Bluetooth manager GUI
+
+# ============================================================================
+# DEVELOPMENT TOOLS
+# ============================================================================
+
+build-essential          # gcc, g++, make, and other build tools
+cmake                    # Cross-platform build system
+cargo                    # Rust package manager (includes rustc)
+git                      # Version control system
+lazygit                  # TUI for git operations (may need manual install)
+openssh-client           # SSH client
+openssh-server           # SSH server
+tmux                     # Terminal multiplexer
+unison                   # File synchronization tool
+docker.io                # Docker container runtime
+python3-pip              # Python package installer
+golang                   # Go programming language
+
+# ============================================================================
+# SHELL
+# ============================================================================
+
+zsh                      # Z shell
+zsh-syntax-highlighting  # Syntax highlighting for zsh
+
+# ============================================================================
+# WAYLAND UTILITIES
+# ============================================================================
+
+# Application Launcher
+wofi                     # Wayland-native application launcher
+
+# Status Bar
+waybar                   # Highly customizable Wayland bar
+
+# Fonts (MUST be installed before display manager)
+fonts-jetbrains-mono     # JetBrains Mono font
+fonts-font-awesome       # Font Awesome icons
+fonts-noto               # Noto fonts (comprehensive Unicode coverage)
+fonts-noto-color-emoji   # Noto Color Emoji font
+
+# Notifications
+mako-notifier            # Lightweight notification daemon for Wayland
+libnotify-bin            # Provides notify-send command
+
+# Screenshots
+grim                     # Screenshot utility for Wayland
+slurp                    # Screen area selection tool for Wayland
+
+# Clipboard
+wl-clipboard             # Wayland clipboard utilities (wl-copy, wl-paste)
+# Note: cliphist needs to be built from source (Go project)
+
+# ============================================================================
+# FILE MANAGEMENT
+# ============================================================================
+
+# Terminal File Manager
+# Note: yazi needs to be installed via cargo or built from source
+
+# Dependencies for file manager (yazi)
+ffmpeg                   # Video thumbnails
+p7zip-full               # Archive extraction
+jq                       # JSON preview
+poppler-utils            # PDF preview (provides pdftoppm)
+fd-find                  # Fast file searching (command is 'fdfind' on Ubuntu)
+ripgrep                  # Content searching
+fzf                      # Fuzzy finder
+zoxide                   # Smart directory jumping
+imagemagick              # Extended image format support
+
+# ============================================================================
+# DOCUMENT VIEWER
+# ============================================================================
+
+zathura                  # Lightweight document viewer
+zathura-pdf-poppler      # PDF support for zathura via poppler
+
+# ============================================================================
+# WEB BROWSER
+# ============================================================================
+
+# Chromium (available as snap)
+# Install via: snap install chromium
+# OR
+firefox                  # Mozilla Firefox browser (default on Ubuntu)
+
+# ============================================================================
+# GAMING (OPTIONAL)
+# ============================================================================
+
+# Note: Steam is better installed via snap or .deb from Valve
+# Mesa Vulkan drivers for AMD
+mesa-vulkan-drivers      # Vulkan support for AMD GPUs
+libgl1-mesa-dri:i386     # 32-bit Mesa drivers for gaming
+libvulkan1:i386          # 32-bit Vulkan loader
+
+# ============================================================================
+# SCANNER & PRINTING
+# ============================================================================
+
+# Scanner
+simple-scan              # GNOME scanner application
+sane                     # Scanner backend library
+sane-airscan             # Modern driverless scanner support (via eSCL/WSD)
+
+# Printing (CUPS)
+cups                     # OpenPrinting CUPS printing system
+cups-browsed             # Printer discovery daemon
+cups-pdf                 # PDF printer backend
+printer-driver-gutenprint  # High-quality generic printer drivers
+system-config-printer    # CUPS printer configuration GUI
+
+# ============================================================================
+# AUDIO
+# ============================================================================
+
+pipewire                 # Modern audio/video server
+pipewire-pulse           # PulseAudio replacement for PipeWire
+pipewire-alsa            # ALSA plugin for PipeWire
+wireplumber              # Session/policy manager for PipeWire
+# Note: pamixer may need to be built from source or use alternative
+pulsemixer               # TUI mixer for PulseAudio/PipeWire
+pavucontrol              # GUI volume control
+
+# ============================================================================
+# BRIGHTNESS CONTROL
+# ============================================================================
+
+brightnessctl            # Screen brightness control utility
+
+# ============================================================================
+# SYSTEM UTILITIES
+# ============================================================================
+
+polkit-kde-agent-1       # Polkit authentication agent (KDE version)
+xdg-utils                # XDG utilities (xdg-open, etc.)
+udisks2                  # Disk management (provides udisksctl)
+curl                     # HTTP client
+wget                     # File downloader
+unzip                    # ZIP archive extraction
+htop                     # Interactive process viewer
+btop                     # Modern resource monitor (may need manual install)
+
+# ============================================================================
+# THEME & APPEARANCE
+# ============================================================================
+
+qt5ct                    # Qt5 configuration tool
+lxappearance             # GTK theme switcher
+
+# ============================================================================
+# DISPLAY MANAGER OPTIONS
+# ============================================================================
+
+# Option 1: GDM (GNOME Display Manager) - Ubuntu default
+gdm3                     # GNOME Display Manager (likely already installed)
+
+# Option 2: LightDM - Lightweight alternative
+# lightdm
+# lightdm-gtk-greeter
+
+# Option 3: SDDM - Qt-based (used in Arch version)
+# sddm
+# qt6-svg
+# qt6-declarative
+
+# ============================================================================
+# NOTES ON MISSING/ALTERNATIVE PACKAGES
+# ============================================================================
+
+# The following packages from Arch need special handling on Ubuntu:
+
+# 1. lazygit - May not be in Ubuntu repos
+#    Install via: snap install lazygit OR build from source
+#    Alternative: use regular git with zsh aliases
+
+# 2. lazydocker - Not in Ubuntu repos
+#    Install via: go install github.com/jesseduffield/lazydocker@latest
+#    Or: curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+# 3. yazi - Terminal file manager (not in Ubuntu repos)
+#    Install via: cargo install --locked yazi-fm yazi-cli
+#    Requires: cargo (listed above)
+
+# 4. eza - Modern ls replacement (not in Ubuntu repos)
+#    Install via: cargo install eza
+#    Alternative: use 'exa' (older version) or regular 'ls'
+
+# 5. cliphist - Clipboard history manager
+#    Build from source: https://github.com/sentriz/cliphist
+#    Requires: go install go.senan.xyz/cliphist@latest
+
+# 6. pamixer - PulseAudio/PipeWire mixer CLI
+#    May need to build from source or use alternative (pactl, wpctl)
+
+# 7. hyprpicker - Color picker (Hyprland-specific)
+#    No direct replacement needed (Hyprland → Sway migration)
+#    Alternative: use grim + slurp for screenshots, extract color manually
+
+# 8. Material Design Icons Desktop font
+#    Not easily available on Ubuntu
+#    May need to download manually from: https://github.com/Templarian/MaterialDesign-Font
+#    Or use Font Awesome icons as fallback
+
+# 9. Claude Code - Install via official script
+#    curl -fsSL https://claude.ai/install.sh | bash
+
+# 10. nvm (Node Version Manager) - Install via official script
+#     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+# 11. Epson printer driver (AUR: epson-inkjet-printer-escpr2)
+#     Check Epson website for Ubuntu .deb package
+#     Or use generic CUPS drivers
+
+# ============================================================================
+# PPAs REQUIRED (Add in bootstrap script)
+# ============================================================================
+
+# Neovim (for version 0.10+)
+# sudo add-apt-repository ppa:neovim-ppa/unstable
+# sudo apt update
+# sudo apt install neovim
+
+# Sway (for latest version, if needed)
+# Check if Ubuntu 24.04 has recent enough version in main repos first
