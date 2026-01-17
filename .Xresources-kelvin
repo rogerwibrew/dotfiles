@@ -1,0 +1,8 @@
+! ~/.Xresources-kelvin - Desktop-specific X11 settings
+! Standard DPI display
+
+! DPI for standard display
+Xft.dpi: 96
+
+! Standard cursor size
+Xcursor.size: 24

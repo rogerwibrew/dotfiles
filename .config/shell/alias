@@ -2,27 +2,161 @@
 # This file is sourced by .zshrc
 # Add your custom aliases here
 
-# Current aliases from original .zshrc
-alias ls='eza -l --git -o --icons="auto"'
-alias ll='eza -l'
-alias la='eza -la'
+# =============================================================================
+# RUST CLI TOOL REPLACEMENTS
+# =============================================================================
+# These modern Rust tools replace traditional Unix commands
+# Original commands available with 'o' prefix (e.g., ols, ocat, ofind)
+
+# eza (ls replacement) - with sensible defaults
+alias ls='eza'
+alias ll='eza -l --git'
+alias la='eza -la --git'
 alias lt='eza --tree'
+alias tree='eza --tree'
 
-# Zoxide - smart directory jumping (use 'builtin cd' for traditional cd)
-alias cd='z'
+# bat (cat replacement) - syntax highlighting
+alias cat='bat --paging=never --style=plain'
+alias less='bat --paging=always'
+alias bathelp='bat --plain --language=help'
 
-# SSH and Sync shortcuts
-alias ssh-newton='~/dotfiles/scripts/ssh/connect-newton.sh'
-alias sync-now='~/dotfiles/scripts/sync/sync-now.sh'
+# fd (find replacement) - simpler syntax, respects .gitignore
+alias find='fd'
+
+# ripgrep (grep replacement) - fast, respects .gitignore
+alias grep='rg'
+
+# dust (du replacement) - intuitive disk usage
+alias du='dust'
+
+# procs (ps replacement) - modern process viewer
+alias ps='procs'
+
+# bottom (top replacement) - graphical system monitor
+alias top='btm'
+alias htop='btm'
+
+# delta (diff replacement) - better diffs with syntax highlighting
+alias diff='delta'
+
+# tlrc (tldr replacement) - quick command help
+alias tldr='tlrc'
+
+# =============================================================================
+# ORIGINAL COMMANDS (escape hatches)
+# =============================================================================
+# Use these when you need the original behavior
+
+alias ols='/bin/ls'
+alias ocat='/bin/cat'
+alias ofind='/usr/bin/find'
+alias ogrep='/bin/grep'
+alias odu='/usr/bin/du'
+alias ops='/bin/ps'
+alias otop='/usr/bin/top'
+alias odiff='/usr/bin/diff'
+
+# =============================================================================
+# ZOXIDE (cd replacement)
+# =============================================================================
+# Smart directory jumping with frecency
+# Use 'builtin cd' or 'ocd' for traditional cd behavior
+
+alias ocd='builtin cd'
+# Note: zoxide init is in .zshrc: eval "$(zoxide init zsh)"
+# This makes 'z' and 'zi' available, and optionally aliases cd
+
+# =============================================================================
+# SSH AND SYNC
+# =============================================================================
+
+alias ssh-newton='~/scripts/ssh/connect-newton.sh'
+alias sync-now='~/scripts/sync/sync-now.sh'
 alias sync-check='tmux attach -t unison'
 alias sync-stop='tmux kill-session -t unison'
 alias sync-log='tail -f ~/.unison/dev-sync.log'
 
-# Dotfiles git shortcuts
+# =============================================================================
+# DOTFILES MANAGEMENT
+# =============================================================================
+
 alias dotfiles-push='~/dotfiles/scripts/git/dotfiles-push.sh'
 alias dotfiles-pull='~/dotfiles/scripts/git/dotfiles-pull.sh'
+alias dotfiles='cd ~/dotfiles'
 
-# System maintenance
-alias safe-update='~/dotfiles/scripts/system/safe-update.sh'
-alias check-updates='~/dotfiles/scripts/system/safe-update.sh --check'
-alias quick-update='~/dotfiles/scripts/system/safe-update.sh --quick'
+# =============================================================================
+# SYSTEM MAINTENANCE (Debian)
+# =============================================================================
+
+alias apt-update='sudo apt update && sudo apt upgrade'
+alias apt-clean='sudo apt autoremove && sudo apt autoclean'
+alias apt-search='apt search'
+alias apt-info='apt show'
+
+# =============================================================================
+# QUICK NAVIGATION
+# =============================================================================
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias dev='cd ~/dev'
+alias data='cd ~/data'
+alias dl='cd ~/downloads'
+
+# =============================================================================
+# GIT SHORTCUTS
+# =============================================================================
+
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+alias glog='git log --oneline --graph --decorate'
+alias lg='lazygit'
+
+# =============================================================================
+# MISC UTILITIES
+# =============================================================================
+
+# Quick edit config files
+alias zshrc='$EDITOR ~/.config/zsh/.zshrc'
+alias aliases='$EDITOR ~/.config/shell/alias'
+
+# Reload shell configuration
+alias reload='source ~/.config/zsh/.zshrc'
+
+# Clear screen
+alias c='clear'
+alias cls='clear'
+
+# Confirm before overwrite
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+
+# Make directories with parents
+alias mkdir='mkdir -pv'
+
+# Show path in readable format
+alias path='echo $PATH | tr ":" "\n"'
+
+# Get public IP
+alias myip='curl -s ifconfig.me'
+
+# =============================================================================
+# DWM-SPECIFIC (Debian branch)
+# =============================================================================
+
+# Rebuild and reinstall dwm
+alias dwm-rebuild='cd ~/dotfiles/suckless/dwm && sudo make clean install && cd -'
+alias dmenu-rebuild='cd ~/dotfiles/suckless/dmenu && sudo make clean install && cd -'
+
+# Lock screen
+alias lock='slock'

@@ -1,0 +1,12 @@
+! ~/.Xresources-watt - Laptop-specific X11 settings
+! HiDPI 4K display configuration
+
+! HiDPI for 4K display (effectively 2x scaling)
+! Adjust this value based on what looks best:
+! - 192 = 2x scaling (for 4K at ~15")
+! - 144 = 1.5x scaling
+! - 120 = 1.25x scaling
+Xft.dpi: 192
+
+! Larger cursor for HiDPI
+Xcursor.size: 48
