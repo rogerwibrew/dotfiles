@@ -12,17 +12,17 @@ static const char unknown_str[] = "n/a";
 
 /*
  * Desktop layout (kelvin):
- * Vol: 75% | Net: MyWiFi | Disk: 45% | CPU: 12% | RAM: 8.5G | Temp: 45°C | Sat 18 Jan  10:45
+ * Vol: 75% | Net: Connected | Disk: 45% | CPU: 12% | RAM: 8.5G | Sat 18 Jan  10:45
  *
  * No battery indicator (desktop)
+ * Using enp4s0 for wired ethernet (not wifi)
  */
 static const struct arg args[] = {
 	/* function format          argument */
 	{ run_command, "Vol: %s%% | ", "pamixer --get-volume" },
-	{ wifi_essid,  "Net: %s | ",   "wlan0" },
+	{ run_command, "Net: %s | ",   "cat /sys/class/net/enp4s0/operstate" },
 	{ disk_perc,   "Disk: %s%% | ", "/home" },
 	{ cpu_perc,    "CPU: %s%% | ",  NULL },
 	{ ram_used,    "RAM: %s | ",    NULL },
-	{ temp,        "Temp: %s°C | ", "/sys/class/thermal/thermal_zone2/temp" },
 	{ datetime,    "%s",            "%a %d %b  %H:%M" },
 };
