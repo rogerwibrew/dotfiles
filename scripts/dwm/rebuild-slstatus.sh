@@ -13,6 +13,15 @@ echo "=========================================="
 
 cd "$DOTFILES_DIR/suckless/slstatus"
 
+# Copy hostname-specific config
+HOSTNAME=$(hostname)
+if [ -f "$DOTFILES_DIR/suckless/slstatus/config-$HOSTNAME.h" ]; then
+    echo "==> Copying config-$HOSTNAME.h to config.h..."
+    cp "$DOTFILES_DIR/suckless/slstatus/config-$HOSTNAME.h" config.h
+else
+    echo "WARNING: config-$HOSTNAME.h not found, using existing config.h"
+fi
+
 echo "==> Recompiling slstatus..."
 sudo make clean install
 
