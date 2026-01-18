@@ -164,7 +164,8 @@ vulkan-tools             # Vulkan utilities (vulkaninfo)
 # ============================================================================
 
 simple-scan              # GNOME scanner application
-sane                     # Scanner backend
+libsane                  # Scanner backend library
+sane-utils               # Scanner utilities
 sane-airscan             # Modern driverless scanner support
 
 cups                     # CUPS printing system
@@ -184,7 +185,8 @@ acpid                    # ACPI event daemon
 # ============================================================================
 
 sudo                     # Privilege escalation
-policykit-1              # Polkit for authentication
+polkitd                  # Polkit daemon for authentication
+pkexec                   # Polkit execution tool
 udisks2                  # Disk management
 unzip                    # Archive extraction
 htop                     # Process viewer (fallback before bottom)
