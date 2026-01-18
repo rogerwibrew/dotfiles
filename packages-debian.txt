@@ -22,6 +22,7 @@ x11-xserver-utils        # xrdb, xset, xrandr
 libx11-dev               # X11 development headers (for dwm)
 libxft-dev               # Xft font library (for dwm)
 libxinerama-dev          # Multi-monitor support (for dwm)
+x11proto-dev             # X11 protocol headers (for XF86 keys)
 libfreetype6-dev         # FreeType fonts (for dwm)
 libfontconfig1-dev       # Font configuration (for dwm)
 xclip                    # X11 clipboard utility
