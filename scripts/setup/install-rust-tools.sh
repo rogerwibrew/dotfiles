@@ -32,13 +32,17 @@ info "Installing Rust CLI tools via cargo..."
 info "This may take a while on first run (compiling from source)"
 echo ""
 
+# Get cargo bin directory
+CARGO_BIN="${CARGO_HOME:-$HOME/.local/share/cargo}/bin"
+
 # Function to install a cargo package
 install_tool() {
     local package=$1
     local binary=$2
     local description=$3
 
-    if command -v "$binary" &>/dev/null; then
+    # Check if binary exists in cargo bin (more reliable than command -v)
+    if [ -f "$CARGO_BIN/$binary" ]; then
         success "$binary already installed"
     else
         info "Installing $package ($description)..."
@@ -72,13 +76,13 @@ install_tool "broot" "broot" "interactive tree navigator"
 echo ""
 echo "=== Git & Development ==="
 install_tool "git-delta" "delta" "better git diff viewer"
-install_tool "lazygit" "lazygit" "terminal git UI"
 install_tool "hyperfine" "hyperfine" "command benchmarking"
+# Note: lazygit is a Go app, not available via cargo. Install separately if needed.
 
 echo ""
 echo "=== File Manager ==="
 info "Installing yazi (terminal file manager)..."
-if command -v yazi &>/dev/null; then
+if [ -f "$CARGO_BIN/yazi" ]; then
     success "yazi already installed"
 else
     if cargo install --locked yazi-fm yazi-cli 2>/dev/null; then

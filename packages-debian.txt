@@ -255,7 +255,7 @@ rsync                    # File synchronization
 # - hyperfine (benchmarking)
 # - git-delta (diff replacement)
 # - yazi-fm, yazi-cli (file manager)
-# - lazygit (git TUI)
+# - lazygit (git TUI) - NOT cargo, install from GitHub releases
 
 # EXTERNAL INSTALLS:
 # - Claude Code: curl -fsSL https://claude.ai/install.sh | bash
