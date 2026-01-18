@@ -67,6 +67,12 @@ fi
 DEBIAN_VERSION=$(cat /etc/debian_version)
 info "Detected Debian $DEBIAN_VERSION"
 
+# Check Debian version (recommend 12+ / Bookworm)
+DEBIAN_MAJOR=$(echo "$DEBIAN_VERSION" | cut -d. -f1)
+if [ "$DEBIAN_MAJOR" -lt 12 ]; then
+  warning "Debian $DEBIAN_VERSION detected. This script is designed for Debian 12+ (Bookworm). Some packages may be outdated."
+fi
+
 # Set SCRIPT_DIR early, before any directory changes
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 info "Bootstrap script location: $SCRIPT_DIR"
@@ -115,7 +121,6 @@ info "Installing packages from packages-debian.txt..."
 # Ensure all required config directories exist in dotfiles repo
 mkdir -p "$SCRIPT_DIR/.config/kitty"
 mkdir -p "$SCRIPT_DIR/.config/yazi"
-mkdir -p "$SCRIPT_DIR/.config/swaylock"
 mkdir -p "$SCRIPT_DIR/.config/tmux"
 mkdir -p "$SCRIPT_DIR/.config/unison"
 mkdir -p "$SCRIPT_DIR/.config/zsh"
@@ -182,6 +187,10 @@ fi
 if command -v cargo &>/dev/null; then
   info "Installing Rust CLI tools..."
   "$SCRIPT_DIR/scripts/setup/install-rust-tools.sh" || warning "Some Rust tools may have failed"
+
+  # Add cargo binaries to PATH for this session
+  export PATH="$CARGO_HOME/bin:$PATH"
+  success "Rust CLI tools added to PATH"
 else
   warning "Cargo not available, skipping Rust CLI tools"
 fi
@@ -200,7 +209,7 @@ if [ ! -f /usr/local/bin/dwm ]; then
   cd "$SUCKLESS_DIR"
 
   # Clone dwm if not present
-  if [ ! -d dwm/dwm.c ]; then
+  if [ ! -f dwm/dwm.c ]; then
     # Download dwm source
     if [ -d dwm-temp ]; then rm -rf dwm-temp; fi
     git clone https://git.suckless.org/dwm dwm-temp
@@ -211,6 +220,12 @@ if [ ! -f /usr/local/bin/dwm ]; then
   fi
 
   cd dwm
+
+  # Verify source files exist before compiling
+  if [ ! -f dwm.c ] || [ ! -f Makefile ]; then
+    error "dwm source files missing. Clone may have failed."
+  fi
+
   sudo make clean install
   success "dwm compiled and installed"
 else
@@ -223,7 +238,7 @@ if [ ! -f /usr/local/bin/dmenu ]; then
   cd "$SUCKLESS_DIR"
 
   # Clone dmenu if not present
-  if [ ! -d dmenu/dmenu.c ]; then
+  if [ ! -f dmenu/dmenu.c ]; then
     if [ -d dmenu-temp ]; then rm -rf dmenu-temp; fi
     git clone https://git.suckless.org/dmenu dmenu-temp
     cp dmenu-temp/*.c dmenu-temp/*.h dmenu-temp/Makefile dmenu-temp/config.mk dmenu/ 2>/dev/null || true
@@ -232,10 +247,55 @@ if [ ! -f /usr/local/bin/dmenu ]; then
   fi
 
   cd dmenu
+
+  # Verify source files exist before compiling
+  if [ ! -f dmenu.c ] || [ ! -f Makefile ]; then
+    error "dmenu source files missing. Clone may have failed."
+  fi
+
   sudo make clean install
   success "dmenu compiled and installed"
 else
   success "dmenu already installed"
+fi
+
+cd "$SCRIPT_DIR"
+
+# Clone and compile slstatus
+if [ ! -f /usr/local/bin/slstatus ]; then
+  info "Compiling slstatus..."
+  cd "$SUCKLESS_DIR"
+
+  # Clone slstatus if not present
+  if [ ! -f slstatus/slstatus.c ]; then
+    if [ -d slstatus-temp ]; then rm -rf slstatus-temp; fi
+    git clone https://git.suckless.org/slstatus slstatus-temp
+    cp slstatus-temp/*.c slstatus-temp/*.h slstatus-temp/Makefile slstatus-temp/config.mk slstatus/ 2>/dev/null || true
+    rm -rf slstatus-temp
+  fi
+
+  cd slstatus
+
+  # Use hostname-specific config if available, otherwise use generic
+  if [ -f "$SCRIPT_DIR/suckless/slstatus/config-$HOSTNAME.h" ]; then
+    info "Using slstatus config for $HOSTNAME"
+    cp "$SCRIPT_DIR/suckless/slstatus/config-$HOSTNAME.h" config.h
+  elif [ -f "$SCRIPT_DIR/suckless/slstatus/config.h" ]; then
+    info "Using generic slstatus config"
+    cp "$SCRIPT_DIR/suckless/slstatus/config.h" config.h
+  else
+    warning "No slstatus config found, using default"
+  fi
+
+  # Verify source files exist before compiling
+  if [ ! -f slstatus.c ] || [ ! -f Makefile ]; then
+    error "slstatus source files missing. Clone may have failed."
+  fi
+
+  sudo make clean install
+  success "slstatus compiled and installed"
+else
+  success "slstatus already installed"
 fi
 
 cd "$SCRIPT_DIR"

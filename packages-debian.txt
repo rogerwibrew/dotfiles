@@ -31,8 +31,7 @@ xdotool                  # X11 automation tool
 # TERMINAL
 # ============================================================================
 
-kitty                    # GPU-accelerated terminal
-# Note: st (suckless terminal) compiled from source as alternative
+kitty                    # GPU-accelerated terminal (default for dwm)
 
 # ============================================================================
 # EDITOR
@@ -107,6 +106,7 @@ pipewire-pulse           # PulseAudio replacement
 pipewire-alsa            # ALSA support
 wireplumber              # Session manager for PipeWire
 pavucontrol              # Volume control GUI
+pamixer                  # CLI volume control (for slstatus)
 alsa-utils               # ALSA utilities (alsamixer, etc.)
 
 # ============================================================================
@@ -238,8 +238,7 @@ rsync                    # File synchronization
 # SUCKLESS TOOLS (compiled from ~/dotfiles/suckless/):
 # - dwm (window manager)
 # - dmenu (application launcher)
-# - st (terminal, optional)
-# - slstatus (status bar, optional)
+# - slstatus (status bar for dwm)
 
 # RUST CLI TOOLS (installed via cargo):
 # - eza (ls replacement)

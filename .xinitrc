@@ -31,6 +31,9 @@ xsetroot -solid "#1a1b26"
 # Start notification daemon
 dunst &
 
+# Start status bar (slstatus)
+slstatus &
+
 # Start network manager applet (optional, for WiFi management)
 # nm-applet &
 
