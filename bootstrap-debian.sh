@@ -203,23 +203,49 @@ info "Compiling suckless tools..."
 
 SUCKLESS_DIR="$SCRIPT_DIR/suckless"
 
+# Helper function to setup suckless tool source
+# Args: tool_name, git_repo
+setup_suckless_source() {
+  local tool=$1
+  local repo=$2
+  local tool_dir="$SUCKLESS_DIR/$tool"
+
+  cd "$SUCKLESS_DIR"
+
+  # Always clone fresh to ensure we have ALL files
+  info "Fetching $tool source from suckless.org..."
+  rm -rf "${tool}-temp"
+  git clone "$repo" "${tool}-temp" || { warning "Failed to clone $tool"; return 1; }
+
+  # Back up our config.h if it exists
+  if [ -f "$tool_dir/config.h" ]; then
+    cp "$tool_dir/config.h" "/tmp/${tool}-config.h.bak"
+  fi
+
+  # Copy ALL files from clone to our directory
+  mkdir -p "$tool_dir"
+  cp -r ${tool}-temp/* "$tool_dir/" 2>/dev/null || true
+
+  # Restore our config.h (overwrites the default)
+  if [ -f "/tmp/${tool}-config.h.bak" ]; then
+    cp "/tmp/${tool}-config.h.bak" "$tool_dir/config.h"
+    rm -f "/tmp/${tool}-config.h.bak"
+  fi
+
+  rm -rf "${tool}-temp"
+  return 0
+}
+
 # Clone and compile dwm
 if [ ! -f /usr/local/bin/dwm ]; then
   info "Compiling dwm..."
-  cd "$SUCKLESS_DIR"
 
-  # Clone dwm if not present
-  if [ ! -f dwm/dwm.c ]; then
-    # Download dwm source
-    if [ -d dwm-temp ]; then rm -rf dwm-temp; fi
-    git clone https://git.suckless.org/dwm dwm-temp
-    # Copy all source files (keeping our config.h with -n = no-clobber)
-    cp -n dwm-temp/* dwm/ 2>/dev/null || true
-    cp dwm-temp/config.def.h dwm/ 2>/dev/null || true
-    rm -rf dwm-temp
+  # Fetch source if missing or incomplete
+  if [ ! -f "$SUCKLESS_DIR/dwm/dwm.c" ] || [ ! -f "$SUCKLESS_DIR/dwm/Makefile" ]; then
+    setup_suckless_source "dwm" "https://git.suckless.org/dwm"
   fi
 
-  cd dwm
+  cd "$SUCKLESS_DIR/dwm"
 
   # Verify source files exist before compiling
   if [ ! -f dwm.c ] || [ ! -f Makefile ]; then
@@ -235,19 +261,13 @@ fi
 # Clone and compile dmenu
 if [ ! -f /usr/local/bin/dmenu ]; then
   info "Compiling dmenu..."
-  cd "$SUCKLESS_DIR"
 
-  # Clone dmenu if not present
-  if [ ! -f dmenu/dmenu.c ]; then
-    if [ -d dmenu-temp ]; then rm -rf dmenu-temp; fi
-    git clone https://git.suckless.org/dmenu dmenu-temp
-    # Copy all source files (keeping our config.h with -n = no-clobber)
-    cp -n dmenu-temp/* dmenu/ 2>/dev/null || true
-    cp dmenu-temp/config.def.h dmenu/ 2>/dev/null || true
-    rm -rf dmenu-temp
+  # Fetch source if missing or incomplete
+  if [ ! -f "$SUCKLESS_DIR/dmenu/dmenu.c" ] || [ ! -f "$SUCKLESS_DIR/dmenu/Makefile" ]; then
+    setup_suckless_source "dmenu" "https://git.suckless.org/dmenu"
   fi
 
-  cd dmenu
+  cd "$SUCKLESS_DIR/dmenu"
 
   # Verify source files exist before compiling
   if [ ! -f dmenu.c ] || [ ! -f Makefile ]; then
@@ -265,28 +285,18 @@ cd "$SCRIPT_DIR"
 # Clone and compile slstatus
 if [ ! -f /usr/local/bin/slstatus ]; then
   info "Compiling slstatus..."
-  cd "$SUCKLESS_DIR"
 
-  # Clone slstatus if not present
-  if [ ! -f slstatus/slstatus.c ]; then
-    if [ -d slstatus-temp ]; then rm -rf slstatus-temp; fi
-    git clone https://git.suckless.org/slstatus slstatus-temp
-    # Copy all source files (keeping our config.h with -n = no-clobber)
-    cp -n slstatus-temp/* slstatus/ 2>/dev/null || true
-    rm -rf slstatus-temp
+  # Fetch source if missing or incomplete
+  if [ ! -f "$SUCKLESS_DIR/slstatus/slstatus.c" ] || [ ! -f "$SUCKLESS_DIR/slstatus/Makefile" ]; then
+    setup_suckless_source "slstatus" "https://git.suckless.org/slstatus"
   fi
 
-  cd slstatus
+  cd "$SUCKLESS_DIR/slstatus"
 
-  # Use hostname-specific config if available, otherwise use generic
+  # Use hostname-specific config if available
   if [ -f "$SCRIPT_DIR/suckless/slstatus/config-$HOSTNAME.h" ]; then
     info "Using slstatus config for $HOSTNAME"
     cp "$SCRIPT_DIR/suckless/slstatus/config-$HOSTNAME.h" config.h
-  elif [ -f "$SCRIPT_DIR/suckless/slstatus/config.h" ]; then
-    info "Using generic slstatus config"
-    cp "$SCRIPT_DIR/suckless/slstatus/config.h" config.h
-  else
-    warning "No slstatus config found, using default"
   fi
 
   # Verify source files exist before compiling
