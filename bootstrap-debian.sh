@@ -213,8 +213,8 @@ if [ ! -f /usr/local/bin/dwm ]; then
     # Download dwm source
     if [ -d dwm-temp ]; then rm -rf dwm-temp; fi
     git clone https://git.suckless.org/dwm dwm-temp
-    # Move source files to our dwm directory (keeping our config.h)
-    cp dwm-temp/*.c dwm-temp/*.h dwm-temp/*.1 dwm-temp/Makefile dwm-temp/config.mk dwm/ 2>/dev/null || true
+    # Copy all source files (keeping our config.h with -n = no-clobber)
+    cp -n dwm-temp/* dwm/ 2>/dev/null || true
     cp dwm-temp/config.def.h dwm/ 2>/dev/null || true
     rm -rf dwm-temp
   fi
@@ -241,7 +241,8 @@ if [ ! -f /usr/local/bin/dmenu ]; then
   if [ ! -f dmenu/dmenu.c ]; then
     if [ -d dmenu-temp ]; then rm -rf dmenu-temp; fi
     git clone https://git.suckless.org/dmenu dmenu-temp
-    cp dmenu-temp/*.c dmenu-temp/*.h dmenu-temp/*.1 dmenu-temp/Makefile dmenu-temp/config.mk dmenu/ 2>/dev/null || true
+    # Copy all source files (keeping our config.h with -n = no-clobber)
+    cp -n dmenu-temp/* dmenu/ 2>/dev/null || true
     cp dmenu-temp/config.def.h dmenu/ 2>/dev/null || true
     rm -rf dmenu-temp
   fi
@@ -270,7 +271,8 @@ if [ ! -f /usr/local/bin/slstatus ]; then
   if [ ! -f slstatus/slstatus.c ]; then
     if [ -d slstatus-temp ]; then rm -rf slstatus-temp; fi
     git clone https://git.suckless.org/slstatus slstatus-temp
-    cp slstatus-temp/*.c slstatus-temp/*.h slstatus-temp/*.1 slstatus-temp/Makefile slstatus-temp/config.mk slstatus/ 2>/dev/null || true
+    # Copy all source files (keeping our config.h with -n = no-clobber)
+    cp -n slstatus-temp/* slstatus/ 2>/dev/null || true
     rm -rf slstatus-temp
   fi
 
