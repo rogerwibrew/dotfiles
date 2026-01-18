@@ -12,8 +12,9 @@
 HOSTNAME=$(hostname)
 [ -f ~/.Xresources-"$HOSTNAME" ] && xrdb -merge ~/.Xresources-"$HOSTNAME"
 
-# Set keyboard repeat rate (300ms delay, 50 repeats/sec)
-xset r rate 300 50
+# Set keyboard repeat rate (300ms delay, 25 repeats/sec)
+# Lower rate prevents accidental multiple window spawns with ZSA Moonlander
+xset r rate 300 25
 
 # Disable screen blanking (we handle this with slock manually)
 xset s off
