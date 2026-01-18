@@ -164,7 +164,7 @@ vulkan-tools             # Vulkan utilities (vulkaninfo)
 # ============================================================================
 
 simple-scan              # GNOME scanner application
-libsane                  # Scanner backend library
+libsane1                 # Scanner backend library
 sane-utils               # Scanner utilities
 sane-airscan             # Modern driverless scanner support
 
