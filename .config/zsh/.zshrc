@@ -5,11 +5,13 @@ export PATH="$HOME/.local/bin:$PATH"
 [[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
 
 # Auto-start Unison sync in tmux on login
-if [[ -o interactive ]] && [[ -z "$TMUX" ]]; then
-  ~/dotfiles/scripts/sync/start-unison.sh >/dev/null 2>&1 &!
-  # Auto-pull dotfiles updates on login
-  ~/dotfiles/scripts/git/dotfiles-pull.sh >/dev/null 2>&1 &!
-fi
+# DISABLED: These scripts have interactive prompts that hang in background
+# and cause login loops on fresh installs
+# To enable: uncomment and ensure scripts run non-interactively
+#if [[ -o interactive ]] && [[ -z "$TMUX" ]]; then
+#  ~/dotfiles/scripts/sync/start-unison.sh >/dev/null 2>&1 &!
+#  ~/dotfiles/scripts/git/dotfiles-pull.sh >/dev/null 2>&1 &!
+#fi
 
 # Enable colors
 autoload -U colors && colors
@@ -64,7 +66,9 @@ y() {
 }
 
 # Initialize zoxide for smart directory jumping
-eval "$(zoxide init zsh)"
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
 
 # Prompt - simple and clean with hostname and git info
 setopt PROMPT_SUBST
