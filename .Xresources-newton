@@ -1,0 +1,8 @@
+! ~/.Xresources-newton - Desktop-specific X11 settings
+! 32" 4K monitor with 1.5x scaling
+
+! DPI for 4K 32" display (1.5x scaling)
+Xft.dpi: 144
+
+! Larger cursor size for HiDPI
+Xcursor.size: 36

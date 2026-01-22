@@ -1,0 +1,264 @@
+# Ubuntu Package List for dwm Setup
+# This file lists packages to install via apt on Ubuntu (22.04+)
+# Lines starting with # are comments
+# Blank lines are ignored
+
+# ============================================================================
+# BUILD ESSENTIALS
+# ============================================================================
+
+build-essential          # gcc, g++, make
+git                      # Version control
+pkg-config               # Library configuration helper
+
+# ============================================================================
+# X11 / DISPLAY
+# ============================================================================
+
+xorg                     # X11 display server
+xserver-xorg             # X server
+xinit                    # startx / xinit
+x11-xserver-utils        # xrdb, xset, xrandr
+libx11-dev               # X11 development headers (for dwm)
+libxft-dev               # Xft font library (for dwm)
+libxinerama-dev          # Multi-monitor support (for dwm)
+x11proto-dev             # X11 protocol headers (for XF86 keys)
+libfreetype6-dev         # FreeType fonts (for dwm)
+libfontconfig1-dev       # Font configuration (for dwm)
+xclip                    # X11 clipboard utility
+xdotool                  # X11 automation tool
+
+# ============================================================================
+# TERMINAL
+# ============================================================================
+
+kitty                    # GPU-accelerated terminal (default for dwm)
+
+# ============================================================================
+# EDITOR
+# ============================================================================
+
+neovim                   # Modern vim
+
+# ============================================================================
+# SHELL
+# ============================================================================
+
+zsh                      # Z shell
+zsh-syntax-highlighting  # Syntax highlighting for zsh
+
+# ============================================================================
+# NETWORK
+# ============================================================================
+
+network-manager          # Network management daemon
+avahi-daemon             # mDNS/DNS-SD daemon
+libnss-mdns              # NSS module for mDNS (.local resolution)
+openssh-client           # SSH client
+openssh-server           # SSH server
+curl                     # HTTP client
+wget                     # File downloader
+
+# ============================================================================
+# BLUETOOTH
+# ============================================================================
+
+bluez                    # Bluetooth protocol stack
+bluez-tools              # Bluetooth utilities
+blueman                  # Bluetooth manager GUI
+
+# ============================================================================
+# DEVELOPMENT TOOLS
+# ============================================================================
+
+cmake                    # Cross-platform build system
+tmux                     # Terminal multiplexer
+unison                   # File synchronization tool
+python3                  # Python interpreter
+python3-pip              # Python package installer
+golang                   # Go programming language
+
+# ============================================================================
+# RUST (via rustup, not apt - but keep rustc for fallback)
+# ============================================================================
+
+# Note: Prefer installing Rust via rustup for latest version
+# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# The following is a fallback:
+# rustc
+# cargo
+
+# ============================================================================
+# FONTS
+# ============================================================================
+
+fonts-jetbrains-mono     # JetBrains Mono font
+fonts-font-awesome       # Font Awesome icons
+fonts-noto               # Noto fonts (comprehensive Unicode)
+fonts-noto-color-emoji   # Color emoji support
+fontconfig               # Font configuration
+
+# ============================================================================
+# AUDIO
+# ============================================================================
+
+pipewire                 # Modern audio server
+pipewire-pulse           # PulseAudio replacement
+pipewire-alsa            # ALSA support
+wireplumber              # Session manager for PipeWire
+pavucontrol              # Volume control GUI
+pamixer                  # CLI volume control (for slstatus)
+alsa-utils               # ALSA utilities (alsamixer, etc.)
+
+# ============================================================================
+# FILE MANAGEMENT
+# ============================================================================
+
+# yazi - Install via cargo: cargo install --locked yazi-fm yazi-cli
+
+# Dependencies for file previews in yazi/terminals
+ffmpeg                   # Video thumbnails
+p7zip-full               # Archive extraction
+jq                       # JSON processing
+poppler-utils            # PDF utilities (pdftoppm)
+imagemagick              # Image manipulation
+
+# ============================================================================
+# DOCUMENT VIEWER
+# ============================================================================
+
+zathura                  # Minimal PDF viewer
+zathura-pdf-poppler      # PDF support for zathura
+
+# ============================================================================
+# BROWSER
+# ============================================================================
+
+# Chromium via Flatpak (recommended for sandboxing and updates)
+# flatpak install flathub org.chromium.Chromium
+
+# Alternative: Firefox from Ubuntu repos
+firefox                  # Firefox
+
+# ============================================================================
+# GAMING
+# ============================================================================
+
+# Steam via Flatpak (recommended)
+# flatpak install flathub com.valvesoftware.Steam
+
+# Vulkan support for AMD/Intel/NVIDIA
+mesa-vulkan-drivers      # Vulkan drivers
+libvulkan1               # Vulkan loader
+vulkan-tools             # Vulkan utilities (vulkaninfo)
+
+# 32-bit support for Steam games (enable i386 architecture first)
+# sudo dpkg --add-architecture i386
+# sudo apt update
+# libvulkan1:i386
+# mesa-vulkan-drivers:i386
+
+# ============================================================================
+# SCANNER & PRINTING
+# ============================================================================
+
+simple-scan              # GNOME scanner application
+libsane                  # Scanner backend library (Ubuntu uses libsane, not libsane1)
+sane-utils               # Scanner utilities
+sane-airscan             # Modern driverless scanner support
+
+cups                     # CUPS printing system
+cups-browsed             # Printer discovery
+system-config-printer    # Printer configuration GUI
+
+# ============================================================================
+# BRIGHTNESS & POWER
+# ============================================================================
+
+brightnessctl            # Screen brightness control
+acpi                     # Battery/power info
+acpid                    # ACPI event daemon
+
+# ============================================================================
+# SYSTEM UTILITIES
+# ============================================================================
+
+sudo                     # Privilege escalation
+policykit-1              # Polkit daemon for authentication (Ubuntu package name)
+udisks2                  # Disk management
+unzip                    # Archive extraction
+htop                     # Process viewer (fallback before bottom)
+lsof                     # List open files
+strace                   # System call tracer
+sysstat                  # System statistics (iostat, etc.)
+
+# ============================================================================
+# NOTIFICATIONS
+# ============================================================================
+
+dunst                    # Lightweight notification daemon (X11)
+libnotify-bin            # notify-send command
+
+# ============================================================================
+# SCREENSHOTS
+# ============================================================================
+
+scrot                    # Screenshot utility for X11
+# Alternative: maim + xdotool
+
+# ============================================================================
+# LOCK SCREEN
+# ============================================================================
+
+slock                    # Suckless screen locker (simple)
+# Alternative: i3lock
+
+# ============================================================================
+# FLATPAK
+# ============================================================================
+
+flatpak                  # Flatpak package manager
+
+# ============================================================================
+# MISCELLANEOUS
+# ============================================================================
+
+feh                      # Image viewer (also for setting wallpaper)
+xwallpaper               # Simple wallpaper setter
+tree                     # Directory tree (fallback before eza --tree)
+man-db                   # Manual pages
+less                     # Pager (fallback before bat)
+rsync                    # File synchronization
+
+# ============================================================================
+# NOTES ON COMPILED/CARGO PACKAGES
+# ============================================================================
+
+# The following are NOT in this file - installed via other methods:
+
+# SUCKLESS TOOLS (compiled from ~/dotfiles/suckless/):
+# - dwm (window manager)
+# - dmenu (application launcher)
+# - slstatus (status bar for dwm)
+
+# RUST CLI TOOLS (installed via cargo):
+# - eza (ls replacement)
+# - bat (cat replacement)
+# - fd-find (find replacement)
+# - ripgrep (grep replacement)
+# - dust (du replacement)
+# - procs (ps replacement)
+# - bottom (top replacement)
+# - zoxide (cd replacement)
+# - tlrc (tldr replacement)
+# - broot (tree replacement)
+# - hyperfine (benchmarking)
+# - git-delta (diff replacement)
+# - yazi-fm, yazi-cli (file manager)
+# - lazygit (git TUI) - NOT cargo, install from GitHub releases
+
+# EXTERNAL INSTALLS:
+# - Claude Code: curl -fsSL https://claude.ai/install.sh | bash
+# - nvm: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+# - Chromium: flatpak install flathub org.chromium.Chromium
+# - Steam: flatpak install flathub com.valvesoftware.Steam
